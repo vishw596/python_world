@@ -1,0 +1,54 @@
+/* Mobile warning hidden by default */
+#mobile-warning {
+  display: none;
+}
+
+/* Show warning and hide all other content on small screens */
+@media only screen and (max-width: 768px) {
+  body {
+    background: var(--dark-bg);
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  body > *:not(#mobile-warning) {
+    display: none !important;
+  }
+
+  #mobile-warning {
+    display: flex;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 30px;
+    background: var(--gradient-blue);
+    color: var(--text);
+    font-size: 1.8em;
+    font-weight: bold;
+    border-radius: 12px;
+    box-shadow: var(--card-shadow);
+    animation: fadeIn 0.8s ease-in-out;
+    background-size: 200% 200%;
+    background-position: center;
+    transition: background-position 0.5s;
+  }
+
+  #mobile-warning:hover {
+    background-position: right center;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+}

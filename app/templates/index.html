@@ -1,0 +1,352 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python World | Home</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    
+    <link rel="stylesheet" href="{% static 'css/scroll.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/index.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/uni.css' %}" />
+</head>
+<body>
+    <header style="margin-bottom: 25px;">
+        <div class="container header-container">
+            <div class="logo" onclick="window.location.href = '{% url 'index' %}'">
+                Python<span>World</span>
+            </div>
+            <div class="search-bar">
+                <input type="text" placeholder="Search for articles, questions, or developers..." />
+            </div>
+            <div class="nav-links">
+                <a href="{% url 'feed' %}"> Feed</a>
+                <a href="{% url 'article' %}"> Articles</a>
+                <a href="{% url 'qna' %}"> Q&A</a>
+                <a href="{% url 'utils' %}"> Utilities</a>
+                {% if not request.session.user_id %}
+                <button class="primary-btn" onclick="window.location.href='{% url 'login' %}'">
+                    <i class="fas fa-sign-in-alt"></i> Sign In
+                </button>
+                {% else %}
+                <a href="{% url 'profile' request.session.username %}" style="color: var(--primary); font-weight: 600;">
+                     {{request.session.username}}
+                </a>
+                <button class="primary-btn" onclick="window.location.href='{% url 'logoutUser' %}'">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+    
+    <main class="container">
+        {% if not request.session.user_id %}
+
+        <section class="hero">
+            <h1>Connect. Collaborate. Code.</h1>
+            <p>Join the growing community of Python developers sharing knowledge, solving problems, and building amazing things together.</p>
+            <div class="hero-buttons">
+                <button class="primary-btn">Join Community</button>
+                <button class="secondary-btn">Explore Content</button>
+            </div>
+            <div class="featured-devs">
+                <div class="dev-avatar">AK<div class="dev-status"></div></div>
+                <div class="dev-avatar">JS<div class="dev-status"></div></div>
+                <div class="dev-avatar">ML<div class="dev-status"></div></div>
+                <div class="dev-avatar">PT<div class="dev-status"></div></div>
+                <div class="dev-avatar">RG<div class="dev-status"></div></div>
+                <div class="dev-avatar">+1.2k</div>
+            </div>
+        </section>
+        
+        {% else %}
+
+        <section class="trending-hero">
+            <div class="trending-overlay"></div>
+            <div class="container trending-container">
+              
+                <h1>Connect. Collaborate. Code.</h1>
+                
+                <div class="trending-header">
+                    <div class="trending-icon">
+                        <i class="fas fa-fire"></i>
+                    </div>
+                    <h2>Trending Now</h2>
+                </div>
+                <br>
+                <div class="trending-grid">
+                    <div class="trending-card">
+                        <div class="trending-card-icon">
+                            <i class="fas fa-rocket"></i>
+                        </div>
+                        <div class="trending-card-content">
+                            <h3>Python 3.12 Updates</h3>
+                            <p>Explore the latest features and performance improvements</p>
+                            <div class="trending-stats">
+                                <span><i class="fas fa-user"></i> 1.2k users</span>
+                                <span><i class="fas fa-comment"></i> 356 discussions</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="trending-card">
+                        <div class="trending-card-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <div class="trending-card-content">
+                            <h3>AI with PyTorch</h3>
+                            <p>Build cutting-edge ML models with the latest techniques</p>
+                            <div class="trending-stats">
+                                <span><i class="fas fa-user"></i> 945 users</span>
+                                <span><i class="fas fa-comment"></i> 210 discussions</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="trending-card">
+                        <div class="trending-card-icon">
+                            <i class="fas fa-server"></i>
+                        </div>
+                        <div class="trending-card-content">
+                            <h3>FastAPI Microservices</h3>
+                            <p>Scale your backend with modern Python architecture</p>
+                            <div class="trending-stats">
+                                <span><i class="fas fa-user"></i> 723 users</span>
+                                <span><i class="fas fa-comment"></i> 189 discussions</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="trending-footer">
+                    <button class="primary-btn">Explore Content</button>
+                </div>
+                
+            </div>
+        </section>
+
+        {% endif %}
+        <div class="main-content">
+            <div class="feed">
+                <div class="content-header">
+                    <h2>Latest Activity</h2>
+                    <div class="filter-tabs">
+                        <button class="active">For You</button>
+                        <button>Popular</button>
+                        <button>Recent</button>
+                    </div>
+                </div>
+                
+                <!-- Post 1 -->
+                <div class="card">
+                    <div class="post-header">
+                        <div class="post-avatar">JS</div>
+                        <div class="post-meta">
+                            <div class="post-author">Jake Smith</div>
+                            <div class="post-time">Posted 2 hours ago</div>
+                        </div>
+                        <div class="post-tag">Article</div>
+                    </div>
+                    <div class="post-content">
+                        <h3>Optimizing Python Code Using Vectorization Techniques</h3>
+                        <p>Learn how to harness the power of NumPy for blazing fast numerical operations in Python. This article explores various vectorization techniques that can speed up your code by 100x or more...</p>
+                        <div class="post-image">
+                            <img src="{% static 'image/homePage1st.png' %}" alt="Code optimization visualization" style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                        <div class="post-actions">
+                            <div class="post-action">👍 243 Likes</div>
+                            <div class="post-action">💬 42 Comments</div>
+                            <div class="post-action">🔖 Save</div>
+                            <div class="post-action">↗️ Share</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Post 2 -->
+                <div class="card">
+                    <div class="post-header">
+                        <div class="post-avatar">ML</div>
+                        <div class="post-meta">
+                            <div class="post-author">Maria Lopez</div>
+                            <div class="post-time">Posted 5 hours ago</div>
+                        </div>
+                        <div class="post-tag">Question</div>
+                    </div>
+                    <div class="post-content">
+                        <h3>What's the most efficient way to handle large JSON files in Python?</h3>
+                        <p>I'm working with JSON files that are several GBs in size and regular json.load() is causing memory issues. I've tried streaming parsers but I'm running into other problems. Any recommendations from the community?</p>
+                        <div class="post-actions">
+                            <div class="post-action">👍 87 Likes</div>
+                            <div class="post-action">💬 36 Comments</div>
+                            <div class="post-action">🔖 Save</div>
+                            <div class="post-action">↗️ Share</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Post 3 -->
+                <div class="card">
+                    <div class="post-header">
+                        <div class="post-avatar">RG</div>
+                        <div class="post-meta">
+                            <div class="post-author">Ryan Gosling</div>
+                            <div class="post-time">Posted yesterday</div>
+                        </div>
+                        <div class="post-tag">Project</div>
+                    </div>
+                    <div class="post-content">
+                        <h3>Introducing PyTasker: A Fast Task Scheduling Library</h3>
+                        <p>After months of work, I'm excited to share PyTasker with the community! It's a lightweight, async-first task scheduling library designed for high throughput systems. Looking for contributors and feedback...</p>
+                        <div class="post-image">
+                            <img src='{% static 'image/homePage2nd.png' %}' alt="PyTasker dashboard" style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                        <div class="post-actions">
+                            <div class="post-action">👍 412 Likes</div>
+                            <div class="post-action">💬 68 Comments</div>
+                            <div class="post-action">🔖 Save</div>
+                            <div class="post-action">↗️ Share</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="sidebar">
+                <!-- Trending Topics -->
+                <div class="sidebar-card">
+                    <h3>Trending Topics</h3>
+                    <div class="trending-list">
+                        <div class="trending-item">
+                            <div class="trending-number">01</div>
+                            <div class="trending-content">
+                                <h4>Python 3.12 Performance Improvements</h4>
+                                <div class="trending-meta">1.2k discussions</div>
+                            </div>
+                        </div>
+                        <div class="trending-item">
+                            <div class="trending-number">02</div>
+                            <div class="trending-content">
+                                <h4>FastAPI vs Django for ML services</h4>
+                                <div class="trending-meta">842 discussions</div>
+                            </div>
+                        </div>
+                        <div class="trending-item">
+                            <div class="trending-number">03</div>
+                            <div class="trending-content">
+                                <h4>Type hints best practices</h4>
+                                <div class="trending-meta">523 discussions</div>
+                            </div>
+                        </div>
+                        <div class="trending-item">
+                            <div class="trending-number">04</div>
+                            <div class="trending-content">
+                                <h4>PyTorch vs TensorFlow in 2025</h4>
+                                <div class="trending-meta">498 discussions</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Developer Utilities -->
+                <div class="sidebar-card">
+                    <h3>Developer Utilities</h3>
+                    <div class="utility-list">
+                        <div class="utility-item">
+                            <div class="utility-icon">📹</div>
+                            <div class="utility-content">
+                                <h4>Screen Recorder</h4>
+                                <div class="utility-desc">Record and share your screen quickly</div>
+                            </div>
+                        </div>
+                        <div class="utility-item">
+                            <div class="utility-icon">✓</div>
+                            <div class="utility-content">
+                                <h4>To-Do Manager</h4>
+                                <div class="utility-desc">Track your tasks and projects</div>
+                            </div>
+                        </div>
+                        <div class="utility-item">
+                            <div class="utility-icon">🔧</div>
+                            <div class="utility-content">
+                                <h4>Regex Tester</h4>
+                                <div class="utility-desc">Build and test regular expressions</div>
+                            </div>
+                        </div>
+                        <div class="utility-item">
+                            <div class="utility-icon">⏱️</div>
+                            <div class="utility-content">
+                                <h4>Code Timer</h4>
+                                <div class="utility-desc">Benchmark your code snippets</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Active Developers -->
+                <div class="sidebar-card">
+                    <h3>Active Developers</h3>
+                    <div class="featured-devs" style="margin-top: 1rem; justify-content: space-between;">
+                        <div class="dev-avatar">AK<div class="dev-status"></div></div>
+                        <div class="dev-avatar">JS<div class="dev-status"></div></div>
+                        <div class="dev-avatar">ML<div class="dev-status"></div></div>
+                        <div class="dev-avatar">PT<div class="dev-status"></div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Python World</h3>
+                    <p style="color: var(--text-dim); margin-bottom: 1rem;">A community for Python developers to learn, share, and grow together.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-github"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-discord"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="#">API</a></li>
+                        <li><a href="#">Tutorials</a></li>
+                        <li><a href="#">Community</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Company</h3>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Legal</h3>
+                    <ul>
+                        <li><a href="#">Terms</a></li>
+                        <li><a href="#">Privacy</a></li>
+                        <li><a href="#">Cookies</a></li>
+                        <li><a href="#">Licenses</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Python World. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+      
+</body>
+<div id="mobile-warning">
+    This site is not made for mobile phones
+</div>
+</html>
