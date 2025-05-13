@@ -1,10 +1,10 @@
 # 🌍 Python World – Developer Community Platform
 
-![Python World Banner](ss/home2.png)  
-
 ![Status](https://img.shields.io/badge/Status-Live-brightgreen)  
 
 ![Built With](https://img.shields.io/badge/Built%20With-Django%20%7C%20MongoDB%20%7C%20NGINX%20%7C%20HTML%20%7C%20CSS%20%7C%20JS-orange)
+
+![Python World Banner](ss/home2.png)  
 
 **Python World** is an interactive platform for developers and non-developers alike to learn, share, and grow in the world of Python programming. Built with **Django**, **MongoDB**, and a host of innovative features, this platform provides posts, Q&A, articles, and Python utilities that make learning and sharing fun and interactive.
 
@@ -90,16 +90,19 @@ We thank you for supporting us and contributing to the Python World project!
 
 Here are some visual snapshots of what Python World looks like:
 
-- **Homepage**: ![Homepage](ss/home1.png)
-- 
-- **User Dashboard**: ![Dashboard](https://via.placeholder.com/800x400)
-- 
-- **Forgot Password?**: ![Forgot Password](ss/forgot.png)
--
+- **Homepage**:
+![Homepage](ss/home1.png)
+
+- **User Dashboard**:
+![Dashboard](ss/profile.png)
+  
+- **Forgot Password?**:
+![Forgot Password](ss/forgot.png)
+
 - **Login & SignUp**:
-- 
+
 - ![Login](ss/login.png)
-- 
+
 - ![SignUp](ss/signup.png)
 
 ---
