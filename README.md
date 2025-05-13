@@ -108,7 +108,7 @@ Python World is deployed on **Google Cloud**, using **NGINX** as a reverse proxy
   
 - **Vishw** ([@Vishw](https://github.com/vishw596))
   
-- **Sahil** ([@Sahil](https://github.com/sahilgithub))
+- **Sahil** ([@Sahil](https://github.com/SheikhSahil26))
 
 We thank you for supporting us and contributing to the Python World project!
 
