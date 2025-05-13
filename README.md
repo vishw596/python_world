@@ -1,6 +1,6 @@
 # 🌍 Python World – Developer Community Platform
 
-![Python World Banner](ss/home1.png)  
+![Python World Banner](ss/home2.png)  
 
 ![Status](https://img.shields.io/badge/Status-Live-brightgreen)  
 
@@ -78,9 +78,9 @@ Python World is deployed on **Google Cloud**, using **NGINX** as a reverse proxy
 
 **Python World** was built by a passionate team:
 
-- **Tirth** ([@yourgithub](https://github.com/yourgithub))
-- **Vishw** ([@vishwgithub](https://github.com/vishwgithub))
-- **Sahil** ([@sahilgithub](https://github.com/sahilgithub))
+- **Tirth** ([@Tirth](https://github.com/TIrth999999))
+- **Vishw** ([@Vishw](https://github.com/vishw596))
+- **Sahil** ([@Sahil](https://github.com/sahilgithub))
 
 We thank you for supporting us and contributing to the Python World project!
 
@@ -90,9 +90,17 @@ We thank you for supporting us and contributing to the Python World project!
 
 Here are some visual snapshots of what Python World looks like:
 
-- **Homepage**: ![Homepage](https://via.placeholder.com/800x400)
+- **Homepage**: ![Homepage](ss/home1.png)
+- 
 - **User Dashboard**: ![Dashboard](https://via.placeholder.com/800x400)
-- **Q&A Section**: ![Q&A Section](https://via.placeholder.com/800x400)
+- 
+- **Forgot Password?**: ![Forgot Password](ss/forgot.png)
+-
+- **Login & SignUp**:
+- 
+- ![Login](ss/login.png)
+- 
+- ![SignUp](ss/signup.png)
 
 ---
 
@@ -100,7 +108,6 @@ Here are some visual snapshots of what Python World looks like:
 
 For any queries or suggestions, please feel free to reach out to us at:
 
-- **Email**: contact@pythonworld.com
-- **GitHub**: [Python World GitHub](https://github.com/yourusername/python-world)
+- **Email**: official.pythonworld@gmail.com
 
 ---
