@@ -1,6 +1,6 @@
 # 🌍 Python World – Developer Community Platform
 
-![Python World Banner](ss/home.png)  
+![Python World Banner](ss/home1.png)  
 
 ![Status](https://img.shields.io/badge/Status-Live-brightgreen)  
 
