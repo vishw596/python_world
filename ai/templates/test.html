@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI Voice Assistant</title>
+</head>
+<body>
+    <h1>🎤 Talk to AI</h1>
+
+    <form action="{% url 'ai' 'test.html' %}" id="voiceForm" method="POST">
+        {% csrf_token %}
+        <input type="hidden" id="questionInput" name="question">
+        <button type="button" onclick="startDictation()" id="start">🎙 Start Speaking</button>
+        <button type="button" onclick="stopDictation()" id="stop">🛑 Stop Speaking</button>
+    </form>
+
+    {% if answer %}
+        <h3>🤖 Answer:</h3>
+        <p>{{ answer }}</p>
+    {% endif %}
+
+    <script>
+
+      let recognition;
+      let isListening = false;
+      const startBtn = document.getElementById("start");
+
+      document.addEventListener("keydown", function(event) {
+        if (event.code === "KeyA") {
+            startDictation();
+        }
+    });
+
+
+
+        setInterval(() => {
+
+          if (startBtn) {
+              startBtn.disabled = isListening;
+          }
+      }, 200);
+      
+
+
+
+        function startDictation() {
+            window.speechSynthesis.cancel();
+
+            if ('webkitSpeechRecognition' in window) {
+                recognition = new webkitSpeechRecognition();
+                recognition.continuous = false;
+                recognition.interimResults = false;
+                recognition.lang = "en-US";
+                recognition.start();
+                isListening = true;
+                recognition.onresult = function (event) {
+                    const transcript = event.results[0][0].transcript;
+                    console.log(transcript);
+                    document.getElementById('questionInput').value = transcript;
+                    recognition.stop();
+                    isListening = false;
+                    document.getElementById('voiceForm').submit();
+                };
+
+                recognition.onerror = function (event) {
+                    //alert('Speech recognition error: ' + event.error);
+                    recognition.stop();
+                    isListening = false;
+                };
+
+                recognition.onend = function () {
+                    isListening = false;
+                };
+            } else {
+                alert("Your browser does not support speech recognition.");
+            }
+        }
+
+        function stopDictation() {
+            window.speechSynthesis.cancel();
+            if (recognition) {
+                recognition.stop();
+            }
+        }
+
+        {% if answer %}
+            // Only run this if there's an answer
+            const aiSpeech = new SpeechSynthesisUtterance("{{ answer|escapejs }}");
+            aiSpeech.onend = () => {
+                startDictation(); // Wait till AI finishes speaking, then listen again
+            };
+
+            window.speechSynthesis.cancel(); // Cancel anything playing
+            window.speechSynthesis.speak(aiSpeech);
+            isListening = false;
+        {% endif %}
+    </script>
+</body>
+</html>

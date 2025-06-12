@@ -7,14 +7,90 @@
     <title>Python World | Home</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
-    
+    <link rel="icon" href="{% static "image/favicon.ico" %}"type="image/x-icon">
     <link rel="stylesheet" href="{% static 'css/scroll.css' %}" />
     <link rel="stylesheet" href="{% static 'css/index.css' %}" />
     <link rel="stylesheet" href="{% static 'css/uni.css' %}" />
+
+    <style>
+        .gradient-strip {
+            height: 7px;
+            width: 100%;
+            background: linear-gradient(to right, #ff5733, #ffc300, #28b463);
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            transition: 1s;
+            background-size: 600% 600%;
+            animation: gradientShift 1s linear infinite;
+        }       
+        @keyframes gradientShift {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        
+        #gradient-strip {
+            opacity: 0;
+            height: 0;
+            overflow: hidden;
+            transition: opacity 0.5s ease, 0.5 out;
+        }
+        #gradient-strip.show {
+            opacity: 1;
+            height: 7px;
+            bottom:-5px;
+        }
+        
+        .info-icon {
+            position: fixed;
+            top: 15px;
+            left: 10px;
+            font-size: 20px;
+            background: #1e293b;
+            color: white;
+            padding: 10px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+      
+          .info-icon:hover::after {
+            content: "Press A to speak with AI";
+            position: absolute;
+            top: 50%;
+            left: 130%;
+            background: #0f172a;
+            color: #e2e8f0;
+            padding: 4px 8px;
+            border-radius: 4px;
+            white-space: nowrap;
+            transform: translateY(-50%);
+            font-size: 12px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+          }
+    </style>
 </head>
 <body>
+    <div class="info-icon" title="Press A to speak with AI">i</div>
+    <form action="{% url 'ai' 'index.html' %}" id="voiceForm" method="POST" style="display:none;">
+        {% csrf_token %}
+        <input type="hidden" id="questionInput" name="question">
+    </form>
     <header style="margin-bottom: 25px;">
         <div class="container header-container">
+            <button type="button" onclick="startDictation()" id="start" style="display: none;"></button>
             <div class="logo" onclick="window.location.href = '{% url 'index' %}'">
                 Python<span>World</span>
             </div>
@@ -40,8 +116,8 @@
                 {% endif %}
             </div>
         </div>
+        <div class="gradient-strip" id="gradient-strip"></div>
     </header>
-    
     <main class="container">
         {% if not request.session.user_id %}
 
@@ -49,16 +125,8 @@
             <h1>Connect. Collaborate. Code.</h1>
             <p>Join the growing community of Python developers sharing knowledge, solving problems, and building amazing things together.</p>
             <div class="hero-buttons">
-                <button class="primary-btn">Join Community</button>
-                <button class="secondary-btn">Explore Content</button>
-            </div>
-            <div class="featured-devs">
-                <div class="dev-avatar">AK<div class="dev-status"></div></div>
-                <div class="dev-avatar">JS<div class="dev-status"></div></div>
-                <div class="dev-avatar">ML<div class="dev-status"></div></div>
-                <div class="dev-avatar">PT<div class="dev-status"></div></div>
-                <div class="dev-avatar">RG<div class="dev-status"></div></div>
-                <div class="dev-avatar">+1.2k</div>
+                <button class="primary-btn" onclick="window.location.href='{% url 'signup' %}'"><pre>Join Community Now  <i class="fas fa-user-astronaut"></i></pre></button>
+                {% comment %} <button class="secondary-btn">Explore Content</button> {% endcomment %}
             </div>
         </section>
         
@@ -68,7 +136,7 @@
             <div class="trending-overlay"></div>
             <div class="container trending-container">
               
-                <h1>Connect. Collaborate. Code.</h1>
+                <h1>Python World Welcomes You</h1>
                 
                 <div class="trending-header">
                     <div class="trending-icon">
@@ -80,14 +148,14 @@
                 <div class="trending-grid">
                     <div class="trending-card">
                         <div class="trending-card-icon">
-                            <i class="fas fa-rocket"></i>
+                            <i class="fas fa-newspaper"></i>
                         </div>
                         <div class="trending-card-content">
-                            <h3>Python 3.12 Updates</h3>
-                            <p>Explore the latest features and performance improvements</p>
+                            <h3>Articles</h3>
+                            <p>Explore the latest Tech Article with Python World</p>
                             <div class="trending-stats">
-                                <span><i class="fas fa-user"></i> 1.2k users</span>
-                                <span><i class="fas fa-comment"></i> 356 discussions</span>
+                                <span><i class="fas fa-user"></i> {{users}} users</span>
+                                <span><i class="fas fa-comment"></i> {{articles}} discussions</span>
                             </div>
                         </div>
                     </div>
@@ -97,11 +165,10 @@
                             <i class="fas fa-brain"></i>
                         </div>
                         <div class="trending-card-content">
-                            <h3>AI with PyTorch</h3>
-                            <p>Build cutting-edge ML models with the latest techniques</p>
-                            <div class="trending-stats">
-                                <span><i class="fas fa-user"></i> 945 users</span>
-                                <span><i class="fas fa-comment"></i> 210 discussions</span>
+                            <h3>The Martin - Your AI Assistant</h3>
+                            <p>Personal AI Assistant for Python World. Feel Free to Ask any Question</p>
+                            <div class="trending-stats" style="color:var(--secondary)">
+                                <span>Press "A" Key to Use</span>
                             </div>
                         </div>
                     </div>
@@ -111,18 +178,18 @@
                             <i class="fas fa-server"></i>
                         </div>
                         <div class="trending-card-content">
-                            <h3>FastAPI Microservices</h3>
-                            <p>Scale your backend with modern Python architecture</p>
+                            <h3>Try Out Utilities</h3>
+                            <p>Boost your productivity with Python World Utilities</p>
                             <div class="trending-stats">
-                                <span><i class="fas fa-user"></i> 723 users</span>
-                                <span><i class="fas fa-comment"></i> 189 discussions</span>
+                                <span><i class="fas fa-rocket"></i> {{utilities}} Apps</span>
+                                <span><i class="fas fa-download"></i> {{answers}} Downloads</span>
                             </div>
                         </div>
                     </div>
                 </div>
                 
                 <div class="trending-footer">
-                    <button class="primary-btn">Explore Content</button>
+                    <button class="primary-btn" onclick="window.location.href='{% url 'post' %}'">Explore Content</button>
                 </div>
                 
             </div>
@@ -157,10 +224,8 @@
                             <img src="{% static 'image/homePage1st.png' %}" alt="Code optimization visualization" style="width: 100%; height: 100%; object-fit: cover;">
                         </div>
                         <div class="post-actions">
-                            <div class="post-action">👍 243 Likes</div>
-                            <div class="post-action">💬 42 Comments</div>
-                            <div class="post-action">🔖 Save</div>
-                            <div class="post-action">↗️ Share</div>
+                            <div class="post-action"><i class="fas fa-thumbs-up"></i> 243 Likes</div>
+                            <div class="post-action"><i class="fas fa-comments"></i> 42 Comments</div>
                         </div>
                     </div>
                 </div>
@@ -179,35 +244,8 @@
                         <h3>What's the most efficient way to handle large JSON files in Python?</h3>
                         <p>I'm working with JSON files that are several GBs in size and regular json.load() is causing memory issues. I've tried streaming parsers but I'm running into other problems. Any recommendations from the community?</p>
                         <div class="post-actions">
-                            <div class="post-action">👍 87 Likes</div>
-                            <div class="post-action">💬 36 Comments</div>
-                            <div class="post-action">🔖 Save</div>
-                            <div class="post-action">↗️ Share</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Post 3 -->
-                <div class="card">
-                    <div class="post-header">
-                        <div class="post-avatar">RG</div>
-                        <div class="post-meta">
-                            <div class="post-author">Ryan Gosling</div>
-                            <div class="post-time">Posted yesterday</div>
-                        </div>
-                        <div class="post-tag">Project</div>
-                    </div>
-                    <div class="post-content">
-                        <h3>Introducing PyTasker: A Fast Task Scheduling Library</h3>
-                        <p>After months of work, I'm excited to share PyTasker with the community! It's a lightweight, async-first task scheduling library designed for high throughput systems. Looking for contributors and feedback...</p>
-                        <div class="post-image">
-                            <img src='{% static 'image/homePage2nd.png' %}' alt="PyTasker dashboard" style="width: 100%; height: 100%; object-fit: cover;">
-                        </div>
-                        <div class="post-actions">
-                            <div class="post-action">👍 412 Likes</div>
-                            <div class="post-action">💬 68 Comments</div>
-                            <div class="post-action">🔖 Save</div>
-                            <div class="post-action">↗️ Share</div>
+                            <div class="post-action"><i class="fas fa-thumbs-up"></i> 87 Likes</div>
+                            <div class="post-action"><i class="fas fa-comments"></i> 36 Comments</div>
                         </div>
                     </div>
                 </div>
@@ -254,44 +292,33 @@
                     <h3>Developer Utilities</h3>
                     <div class="utility-list">
                         <div class="utility-item">
-                            <div class="utility-icon">📹</div>
+                            <div class="utility-icon"><i class="fas fa-video"></i></div>
                             <div class="utility-content">
                                 <h4>Screen Recorder</h4>
                                 <div class="utility-desc">Record and share your screen quickly</div>
                             </div>
                         </div>
                         <div class="utility-item">
-                            <div class="utility-icon">✓</div>
+                            <div class="utility-icon"><i class="fas fa-list"></i></div>
                             <div class="utility-content">
                                 <h4>To-Do Manager</h4>
                                 <div class="utility-desc">Track your tasks and projects</div>
                             </div>
                         </div>
                         <div class="utility-item">
-                            <div class="utility-icon">🔧</div>
+                            <div class="utility-icon"><i class="fas fa-code"></i></div>
                             <div class="utility-content">
                                 <h4>Regex Tester</h4>
                                 <div class="utility-desc">Build and test regular expressions</div>
                             </div>
                         </div>
                         <div class="utility-item">
-                            <div class="utility-icon">⏱️</div>
+                            <div class="utility-icon"><i class="fas fa-clock"></i></div>
                             <div class="utility-content">
                                 <h4>Code Timer</h4>
                                 <div class="utility-desc">Benchmark your code snippets</div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                
-                <!-- Active Developers -->
-                <div class="sidebar-card">
-                    <h3>Active Developers</h3>
-                    <div class="featured-devs" style="margin-top: 1rem; justify-content: space-between;">
-                        <div class="dev-avatar">AK<div class="dev-status"></div></div>
-                        <div class="dev-avatar">JS<div class="dev-status"></div></div>
-                        <div class="dev-avatar">ML<div class="dev-status"></div></div>
-                        <div class="dev-avatar">PT<div class="dev-status"></div></div>
                     </div>
                 </div>
             </div>
@@ -343,7 +370,86 @@
             </div>
         </div>
     </footer>
+    <script>
 
+        let recognition;
+        let isListening = false;
+        const startBtn = document.getElementById("start");
+        document.getElementById("gradient-strip").classList.remove("show");
+        document.addEventListener("keydown", function(event) {
+          if (event.code === "KeyA") {
+              startDictation();
+          }
+      });
+  
+  
+  
+          setInterval(() => {
+  
+            if (startBtn) {
+                startBtn.disabled = isListening;
+            }
+        }, 200);
+        
+  
+  
+  
+          function startDictation() {
+            document.getElementById("gradient-strip").classList.add("show");
+               window.speechSynthesis.cancel();
+  
+              if ('webkitSpeechRecognition' in window) {
+                  recognition = new webkitSpeechRecognition();
+                  recognition.continuous = false;
+                  recognition.interimResults = false;
+                  recognition.lang = "en-US";
+                  recognition.start();
+                  isListening = true;
+                  recognition.onresult = function (event) {
+                      const transcript = event.results[0][0].transcript;
+                      console.log(transcript);
+                      document.getElementById('questionInput').value = transcript;
+                      recognition.stop();
+                      isListening = false;
+                      document.getElementById('voiceForm').submit();
+                  };
+  
+                  recognition.onerror = function (event) {
+                      //alert('Speech recognition error: ' + event.error);
+                      recognition.stop();
+                      isListening = false;
+                  };
+  
+                  recognition.onend = function () {
+                      isListening = false;
+                      document.getElementById("gradient-strip").classList.remove("show");
+                  };
+              } else {
+                  alert("Your browser does not support speech recognition.");
+              }
+          }
+  
+          function stopDictation() {
+              window.speechSynthesis.cancel();
+              if (recognition) {
+                  recognition.stop();
+              }
+          }
+  
+          {% if answer %}
+              // Only run this if there's an answer
+              const aiSpeech = new SpeechSynthesisUtterance("{{ answer|escapejs }}");
+              aiSpeech.onend = () => {
+                  startDictation(); // Wait till AI finishes speaking, then listen again
+
+              };
+  
+              window.speechSynthesis.cancel(); // Cancel anything playing
+              window.speechSynthesis.speak(aiSpeech);
+              isListening = false;
+          {% endif %}
+
+      </script>
       
 </body>
 <div id="mobile-warning">

@@ -1,0 +1,430 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Python World | Articles</title>
+        <link rel="stylesheet" href="{% static 'css/scroll.css' %}" />
+        <link rel="stylesheet" href="{% static 'css/article.css' %}" />
+        <link rel="stylesheet" href="{% static 'css/uni.css' %}" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+        <style>
+            .gradient-strip {
+                height: 7px;
+                width: 100%;
+                background: linear-gradient(to right, #ff5733, #ffc300, #28b463);
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                transition: 1s;
+                background-size: 600% 600%;
+                animation: gradientShift 1s linear infinite;
+            }
+            @keyframes gradientShift {
+                0% {
+                    background-position: 0% 50%;
+                }
+                50% {
+                    background-position: 100% 50%;
+                }
+                100% {
+                    background-position: 0% 50%;
+                }
+            }
+
+            #gradient-strip {
+                opacity: 0;
+                height: 0;
+                overflow: hidden;
+                transition: opacity 0.5s ease, 0.5 out;
+            }
+            #gradient-strip.show {
+                opacity: 1;
+                height: 7px;
+                bottom: -5px;
+            }
+        </style>
+    </head>
+    <body>
+        <form action="{% url 'ai' 'article.html' %}" id="voiceForm" method="POST" style="display: none">
+            {% csrf_token %}
+            <input type="hidden" id="questionInput" name="question" />
+        </form>
+        <header style="margin-bottom: 25px">
+            <div class="container header-container">
+                <button type="button" onclick="startDictation()" id="start" style="display: none"></button>
+                <div class="logo" onclick="window.location.href = '{% url 'index' %}'">Python<span>World</span></div>
+                {% comment %}
+                <div class="search-bar">
+                    <input type="text" placeholder="Search for Articles ... " />
+                </div>
+                {% endcomment %}
+                <div class="search-bar">
+                    <input type="text" placeholder="Search for Articles ... " id="searchInput" />
+                    <div
+                        id="searchResults"
+                        class="articles-grid"
+                        style="
+                            position: absolute;
+                            top: 100%;
+                            left: 0;
+                            width: 100%;
+                            z-index: 10;
+                            background-color: var(--card-bg);
+                            padding: 1rem;
+                            border-radius: 12px;
+                            display: none;
+                        "></div>
+                </div>
+
+                <div class="nav-links">
+                    <a href="{% url 'feed' %}"> Feed</a>
+                    <a href="{% url 'article' %}" style="color: var(--primary); font-weight: 600"> Articles</a>
+                    <a href="{% url 'qna' %}"> Q&A</a>
+                    <a href="{% url 'utils' %}"> Utilities</a>
+                    {% if not request.session.user_id %}
+                    <button class="primary-btn" onclick="window.location.href='{% url 'login' %}'">
+                        <i class="fas fa-sign-in-alt"></i> Sign In
+                    </button>
+                    {% else %}
+                    <a
+                        href="{% url 'profile' request.session.username %}"
+                        style="color: var(--primary); font-weight: 600">
+                        {{request.session.username}}
+                    </a>
+                    <button class="primary-btn" onclick="window.location.href='{% url 'logoutUser' %}'">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="gradient-strip" id="gradient-strip"></div>
+        </header>
+
+        <main class="container">
+            <div class="page-header">
+                <div class="page-title">
+                    <h1>Articles & Tutorials</h1>
+                    <p>Learn, explore, and master Python with our community-written articles</p>
+                </div>
+            </div>
+
+            <div class="category-filters" id="category-filter-list" style="overflow: scroll; scrollbar-width: none; -ms-overflow-style: none;">
+                
+            </div>
+
+            <div class="articles-wrapper">
+                <div class="articles-main">
+                    <div class="articles-grid">
+                        {% for article in articles %}
+                        <div
+                            class="article-card"
+                            onclick="window.location.href='{% url 'see_article' article.id %}'"
+                            style="cursor: pointer">
+                            <div class="article-img">
+                                <img
+                                    src="{{ article.imageUrl }}"
+                                    alt="Article Image"
+                                    style="width: 100%; height: 100%; object-fit: cover" />
+                            </div>
+                            <div class="article-content">
+                                <div class="article-meta">
+                                    {% if article.topic == "Python" %}
+                                    <div
+                                        class="article-category"
+                                        style="color: #ffffff; background-color: rgb(5, 9, 255)">
+                                        {{ article.topic }}
+                                    </div>
+                                    {% elif article.topic == "Data Science" %}
+                                    <div class="article-category" style="color: #ffffff; background-color: #14b8a6">
+                                        {{ article.topic }}
+                                    </div>
+                                    {% elif article.topic == "Web Development" %}
+                                    <div
+                                        class="article-category"
+                                        style="color: rgb(0, 0, 0); background-color: rgb(32, 233, 14)">
+                                        {{ article.topic }}
+                                    </div>
+                                    {% elif article.topic == "Machine Learning" %}
+                                    <div
+                                        class="article-category"
+                                        style="color: #ffffff; background-color: rgb(168, 85, 247)">
+                                        {{ article.topic }}
+                                    </div>
+                                    {% elif article.topic == "Android" %}
+                                    <div
+                                        class="article-category"
+                                        style="color: #ffffff; background-color: rgb(249, 115, 22)">
+                                        {{ article.topic }}
+                                    </div>
+                                    {% elif article.topic == "Testing" %}
+                                    <div
+                                        class="article-category"
+                                        style="color: #ffffff; background-color: rgb(100, 116, 139)">
+                                        {{ article.topic }}
+                                    </div>
+                                    {% elif article.topic == "DevOps" %}
+                                    <div
+                                        class="article-category"
+                                        style="color: #ffffff; background-color: rgb(16, 185, 129)">
+                                        {{ article.topic }}
+                                    </div>
+                                    {% elif article.topic == "Game Development" %}
+                                    <div
+                                        class="article-category"
+                                        style="color: #ffffff; background-color: rgb(239, 68, 68)">
+                                        {{ article.topic }}
+                                    </div>
+                                    {% elif article.topic == "Automation" %}
+                                    <div
+                                        class="article-category"
+                                        style="color: #1e293b; background-color: rgb(252, 211, 3)">
+                                        {{ article.topic }}
+                                    </div>
+                                    {% else %}
+                                    <div
+                                        class="article-category"
+                                        style="color: #ffffff; background-color: var(--primary)">
+                                        {{ article.topic }}
+                                    </div>
+                                    {% endif %}
+                                    <div class="article-date">{{ article.created_at }}</div>
+                                </div>
+                                <h3 class="article-title">{{ article.title }}</h3>
+                                <p class="article-excerpt">{{ article.description }}</p>
+                                <div class="article-footer">
+                                    <div class="article-author">
+                                        {% comment %}
+                                        <div class="author-avatar">{{ article.source|slice:"1:2" }}</div>
+                                        {% endcomment %}
+                                        <span>By <b>{{ article.source }}</b></span>
+                                    </div>
+                                    <div class="article-stats">
+                                        <div class="article-stat">
+                                            <i class="fa-solid fa-eye"></i> {{ article.no_of_views }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="pagination">
+                        <div class="pagination-item" onclick="prevPage()">«</div>
+                        <div class="pagination-item active" id="page-indicator">1</div>
+                        <div class="pagination-item" onclick="nextPage()">»</div>
+                    </div>
+                </div>
+
+                <div class="sidebar">
+                    <div class="sidebar-card">
+                        <h3>Popular Articles</h3>
+                        <div class="popular-articles">
+                            {% for article in popular %}
+                            <div
+                                class="popular-article"
+                                onclick="window.location.href='{% url 'see_article' article.id %}'"
+                                style="cursor: pointer">
+                                <div class="popular-article-number">{{forloop.counter}}</div>
+                                <div class="popular-article-content">
+                                    <h4>{{article.title}}</h4>
+                                    <div class="popular-article-meta">{{article.no_of_views}} views</div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="sidebar-card">
+                        <h3>Popular Tags</h3>
+                        <div class="tag-list" id="tag-list">
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <script>
+            const articlesPerPage = 4;
+            let currentPage = 1;
+            const articles = document.querySelectorAll(".article-card");
+            const totalPages = Math.ceil(articles.length / articlesPerPage);
+
+            function showPage(page) {
+                articles.forEach((article, index) => {
+                    article.style.display =
+                        index >= (page - 1) * articlesPerPage && index < page * articlesPerPage ? "block" : "none";
+                });
+
+                document.getElementById("page-indicator").innerText = `${page}`;
+            }
+
+            function nextPage() {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    showPage(currentPage);
+                }
+            }
+
+            function prevPage() {
+                if (currentPage > 1) {
+                    currentPage--;
+                    showPage(currentPage);
+                }
+            }
+
+            // Initialize on load
+            document.addEventListener("DOMContentLoaded", () => {
+                showPage(currentPage);
+            });
+        </script>
+
+        <script>
+
+              let recognition;
+              let isListening = false;
+              const startBtn = document.getElementById("start");
+              document.getElementById("gradient-strip").classList.remove("show");
+              document.addEventListener("keydown", function(event) {
+                if (event.code === "KeyA") {
+                    startDictation();
+                }
+            });
+
+
+
+                setInterval(() => {
+
+                  if (startBtn) {
+                      startBtn.disabled = isListening;
+                  }
+              }, 200);
+
+
+
+
+                function startDictation() {
+                  document.getElementById("gradient-strip").classList.add("show");
+                     window.speechSynthesis.cancel();
+
+                    if ('webkitSpeechRecognition' in window) {
+                        recognition = new webkitSpeechRecognition();
+                        recognition.continuous = false;
+                        recognition.interimResults = false;
+                        recognition.lang = "en-US";
+                        recognition.start();
+                        isListening = true;
+                        recognition.onresult = function (event) {
+                            const transcript = event.results[0][0].transcript;
+                            console.log(transcript);
+                            document.getElementById('questionInput').value = transcript;
+                            recognition.stop();
+                            isListening = false;
+                            document.getElementById('voiceForm').submit();
+                        };
+
+                        recognition.onerror = function (event) {
+                            //alert('Speech recognition error: ' + event.error);
+                            recognition.stop();
+                            isListening = false;
+                        };
+
+                        recognition.onend = function () {
+                            isListening = false;
+                            document.getElementById("gradient-strip").classList.remove("show");
+                        };
+                    } else {
+                        alert("Your browser does not support speech recognition.");
+                    }
+                }
+
+                function stopDictation() {
+                    window.speechSynthesis.cancel();
+                    if (recognition) {
+                        recognition.stop();
+                    }
+                }
+
+                {% if answer %}
+                    // Only run this if there's an answer
+                    const aiSpeech = new SpeechSynthesisUtterance("{{ answer|escapejs }}");
+                    aiSpeech.onend = () => {
+                        startDictation(); // Wait till AI finishes speaking, then listen again
+
+                    };
+
+                    window.speechSynthesis.cancel(); // Cancel anything playing
+                    window.speechSynthesis.speak(aiSpeech);
+                    isListening = false;
+                {% endif %}
+        </script>
+
+        <script src={% static "js/search.js" %}></script>
+        <script>
+              const tags = ["Python","Data Science","Machine Learning",
+                            "Web Development","Django","FastAPI","NumPy","Pandas",
+                            "PyTorch","TensorFlow","Async","OOP","Testing","API","Performance","AI","Tech Ecosystem"];
+                const filterArticleUrl = "{% url 'filter_article' %}";
+                const tagListContainer = document.getElementById("tag-list");
+
+                // Get current filter from URL
+                const urlParams = new URLSearchParams(window.location.search);
+                const activeFilter = urlParams.get("filter");
+
+                tags.forEach((tag) => {
+                    const tagDiv = document.createElement("div");
+                    tagDiv.className = "tag";
+                    tagDiv.textContent = tag;
+
+                    // Apply 'active' class if the tag matches the current filter
+                    if (tag === activeFilter) {
+                        tagDiv.classList.add("active");
+                    }
+
+                    // Redirect on click
+                    tagDiv.onclick = () => {
+                        console.log(tagDiv.textContent)
+                        console.log(activeFilter)
+                        window.location.href = `${filterArticleUrl}?filter=${encodeURIComponent(tag)}`;
+                    };
+
+                    tagListContainer.appendChild(tagDiv);
+                });
+              const categories = [
+                "All","Python Basics","Data Science","Web Development","Machine Learning","Desktop Apps","Testing","DevOps",
+                "Game Development","Automation","AI","Tech Ecosystem"];
+        
+            const baseArticleUrl = "{% url 'article' %}";
+            const categoryListContainer = document.getElementById("category-filter-list");
+        
+            // Get current filter from URL
+        
+            categories.forEach(category => {
+                const btn = document.createElement("button");
+                btn.className = "category-filter";
+                btn.textContent = category;
+        
+                // Add active class
+                if ((category === "All" && !activeFilter) || category === activeFilter) {
+                    btn.classList.add("active");
+                }
+        
+                // Redirect logic
+                if (category === "All") {
+                    btn.onclick = () => {
+                        window.location.href = baseArticleUrl;
+                    };
+                } else {
+                    btn.onclick = () => {
+                        window.location.href = `${filterArticleUrl}?filter=${encodeURIComponent(category)}`;
+                    };
+                }
+        
+                categoryListContainer.appendChild(btn);
+            }); 
+        </script>
+    </body>
+    <div id="mobile-warning">This site is not made for mobile phones</div>
+</html>

@@ -1,0 +1,506 @@
+{% load custom_filters %}
+
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>User Profile | Python World</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+        <link rel="stylesheet" href="{% static 'css/scroll.css' %}" />
+        <link rel="stylesheet" href="{% static 'css/profile.css' %}" />
+        <link rel="stylesheet" href="{% static 'css/uni.css' %}" />
+
+        <style>
+            .dropdown {
+                position: relative;
+                display: inline-block;
+            }
+          
+            .dropdown-menu {
+                display: none;
+                position: absolute;
+                background-color: #2ecc71;
+                min-width: 160px;
+                box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+                z-index: 1;
+                padding: 0;
+                margin-top: 5px;
+                border-radius: 8px;
+                margin-top:40px;
+                color:var(--primary);
+            }
+          
+            .dropdown-menu a {
+                color: black;
+                padding: 12px 16px;
+                text-decoration: none;
+                display: block;
+            }
+          
+            .dropdown.open .dropdown-menu {
+                display: block;
+            }
+          
+            .dropdown-toggle {
+                cursor: pointer;
+            }
+
+            .dropdown-toggle i {
+                transition: transform 0.3s ease;
+                font-size: 25px;
+            }
+          
+            .dropdown.open .dropdown-toggle i {
+                transform: rotate(70deg);
+            }
+            .tag-radio-group {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+              }
+              
+              .tag-radio-group label {
+                background-color: #1e293b;
+                color: #e2e8f0;
+                padding: 8px 16px;
+                border-radius: 25px;
+                font-size: 0.9rem;
+                cursor: pointer;
+                transition: background-color 0.3s, transform 0.2s;
+                border: 2px solid transparent;
+              }
+              
+              .tag-radio-group input[type="radio"]:checked + label {
+                background-color: var(--accent); /* Use your accent color */
+                color: white;
+                transform: scale(1.05);
+                border-color: white;
+              }
+              
+              .tag-radio-group label:hover {
+                background-color: #334155;
+              }
+            
+          </style>
+    </head>
+    <body>
+        <header style="margin-bottom: 25px">
+            <div class="container header-container">
+                <div class="logo" onclick="window.location.href = '{% url 'index' %}'">Python<span>World</span></div>
+                <div class="search-bar" style="visibility:hidden">
+                    <input type="text" placeholder="Search for articles, questions, or developers..." />
+                </div>
+                <div class="nav-links">
+                    <a href="{% url 'feed' %}"> Feed</a>
+                    <a href="{% url 'article' %}"> Articles</a>
+                    <a href="{% url 'qna' %}"> Q&A</a>
+                    <a href="{% url 'utils' %}"> Utilities</a>
+                    {% if not request.session.user_id %}
+                    <button class="primary-btn" onclick="window.location.href='{% url 'login' %}'">
+                        <i class="fas fa-sign-in-alt"></i> Sign In
+                    </button>
+                    {% else %}
+                    <a
+                        href="{% url 'profile' request.session.username %}"
+                        style="color: var(--primary); font-weight: 600">
+                        {{request.session.username}}
+                    </a>
+                    <button class="primary-btn" onclick="window.location.href='{% url 'logoutUser' %}'">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                    {% endif %}
+                </div>
+            </div>
+        </header>
+
+        <main class="container">
+            <div class="content-section">
+                <section class="profile-header">
+                    <div class="dropdown" id="notificationDropdown" style="width:100%;display:flex;justify-content:flex-end;">
+                        <a class="dropdown-toggle" style="text-decoration:none;color:white;">
+                            <i class="fas fa-gear"></i>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li style="text-decoration:none;list-style-type:none;"><a class="dropdown-item" href="{% url 'notificationSetting' %}">Manage Notification</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="profile-avatar">
+                        {% if user.profilePicUrl %}
+                        <img src="{{user.profilePicUrl}}" alt="{{user.username}}'s profile" />
+                        {% else %} {{ user.username|first|upper }} {% endif %}
+                    </div>
+                    <div class="profile-info">
+                        <h1>{{user.username}}</h1>
+                        <p>{% if user.bio %}{{user.bio}}{% else %}Python enthusiast and developer{% endif %}</p>
+
+                        <div class="profile-actions">
+                            {% if user.username == session_username %}
+                            <button
+                                class="primary-btn"
+                                onclick="window.location.href='{% url 'editProfile' %}'"
+                                style="margin-left: auto; margin-right: auto">
+                                <pre><i class="fas fa-pen"></i>  Edit Profile</pre>
+                            </button>
+                            {% else %}
+                            <button
+                                class="primary-btn"
+                                onclick="window.location.href='{% url 'followUnfollow' user.username %}'"
+                                style="margin-left: auto; margin-right: auto">
+                                <pre> {% if is_following %}Unfollow  <i class="fas fa-user-minus"></i>{% else %}<i class="fas fa-user-plus"></i>  Follow{% endif %}</pre>
+                            </button>
+                            {% endif %}
+                        </div>
+
+                        <div class="profile-stats">
+                            <div class="stat">
+                                <h2>{{user.posts|length}}</h2>
+                                <p>Posts</p>
+                            </div>
+                            <div class="stat">
+                                <h2>{{user.followers|length}}</h2>
+                                <p>Followers</p>
+                            </div>
+                            <div class="stat">
+                                <h2>{{user.followings|length}}</h2>
+                                <p>Following</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="section-header">
+                    <h2><i class="fas fa-history"></i> Recent Activity</h2>
+                    {% if user.username == session_username %}
+                    <button class="secondary-btn" id="openPostModalButton"><i class="fas fa-plus"></i> New Post</button>
+                    {% endif %}
+                </div>
+
+                <div class="content-feed">
+                    {% if posts|length > 0 %} {% for post in posts %}
+                    <div class="card">
+                        <div class="post-header">
+                            <div class="post-avatar">
+                                {% if post.posted_by.profilePicUrl %}
+                                <img
+                                    src="{{post.posted_by.profilePicUrl}}"
+                                    alt="{{post.posted_by.username}}"
+                                    style="width: 50px; height: 50px; border-radius: 50%" />
+                                {% else %} {{ post.posted_by.username|first|upper }} {% endif %}
+                            </div>
+                            <div class="post-meta">
+                                <div class="post-author">
+                                    {{post.posted_by.username}} {% if post.posted_by.is_verified %}
+                                    <i class="fas fa-check-circle verified-badge"></i>
+                                    {% endif %}
+                                </div>
+                                <div class="post-time">
+                                    <i class="far fa-clock"></i> {{ post.created_at|date:"M d, Y" }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="post-content">
+                            <h3>{{post.title}}</h3>
+                            <p>{{post.content}}</p>
+                            {% if post.image_url %}
+                            <div class="post-image">
+                                <img src="{{post.image_url}}" alt="{{post.title}}" />
+                            </div>
+                            {% endif %}
+                            <div class="post-actions">
+                                <div class="post-action">
+                                    <i class="far fa-thumbs-up"></i> {{post.likes|length}} Likes
+                                </div>
+                                <div class="post-action">
+                                    <i class="far fa-comment"></i> {{post.comments|length}} Comments
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %} {% else %}
+                    <div class="empty-state">
+                        <i class="fas fa-stream pulse-animation"></i>
+                        <h3>No Activity Yet</h3>
+                        <p>Share your thoughts, code snippets, or projects with the Python community.</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            <aside class="sidebar">
+                    <!-- Followers Card -->
+                <div class="sidebar-card">
+                    <h3><i class="fas fa-user-friends"></i> Followers</h3>
+                    {% if followers|length > 0 %}
+                        <div class="trending-list scrollable-followers">
+                            {% for follower in followers|slice:":5" %}
+                                <div class="trending-item">
+                                    <div class="trending-number">
+                                        <img src="{{follower.profilePicUrl}}" alt="user1" class="follower-avatar" />
+                                    </div>
+                                    <div class="trending-content">
+                                        <a href="{% url "profile" follower.username %}"><h4>{{follower.username}}</h4></a>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <div class="view-all-link">
+                            <a href="#" onclick="openFollowersModal()">View All</a>
+                        </div>
+                    {% else %}
+                        <div class="trending-list scrollable-followers">
+                            <h4>User has no followers</h4>
+                        </div>
+                    {% endif %}
+                </div>
+                    <!-- Followings Card -->
+                <div class="sidebar-card">
+                    <h3><i class="fas fa-user-plus"></i> Followings</h3>
+                    {% if followings|length > 0 %}
+                        <div class="trending-list scrollable-followers">
+                            {% for following in followings|slice:":5" %}
+                            <div class="trending-item">
+                                <div class="trending-number">
+                                    <img src="{{following.profilePicUrl}}" alt="user1" class="follower-avatar" />
+                                </div>
+                                <div class="trending-content">
+                                    <h4>{{following.username}}</h4>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <div class="view-all-link">
+                            <a href="#" onclick="openFollowingsModal()">View All</a>
+                        </div>
+                    {% else %}
+                        <div class="trending-list scrollable-followers">
+                            <h4>You Have not followed any one</h4>
+                        </div>
+                    {% endif %}
+                </div>
+
+            </aside>
+        </main>
+
+        <!-- Followers Modal -->
+        <div id="followersModal" class="modal">
+            <div class="modal-content">
+                <span class="close" id="closeFollowersModal">&times;</span>
+                <div class="modal-header">
+                    <h2><i class="fas fa-user-friends"></i> All Followers</h2>
+                </div>
+                <div class="trending-list">
+                    {% for follower in followers %}
+                    <div class="trending-item">
+                        <div class="trending-number">
+                            <img src="{{follower.profilePicUrl}}" alt="user1" class="follower-avatar" />
+                        </div>
+                        <div class="trending-content">
+                            <h4>{{follower.username}}</h4>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <!-- Followings Modal -->
+        <div id="followingsModal" class="modal">
+            <div class="modal-content">
+                <span class="close" id="closeFollowingsModal">&times;</span>
+                <div class="modal-header">
+                    <h2><i class="fas fa-user-plus"></i> All Followings</h2>
+                </div>
+                <div class="trending-list">
+                    {% for following in followings %}
+                    <div class="trending-item">
+                        <div class="trending-number">
+                            <img src="{{following.profilePicUrl}}" alt="user1" class="follower-avatar" />
+                        </div>
+                        <div class="trending-content">
+                            <h4>{{following.username}}</h4>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <!-- Create Post Modal -->
+        <div id="postModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2><i class="fas fa-edit"></i> Create New Post</h2>
+                </div>
+                <form class="post-form" action="{% url 'post' %}" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="text" name="title" placeholder="Post Title" required />
+                    <textarea name="content" placeholder="What's on your mind?" required></textarea>
+                    <div class="tag-radio-group">
+                        <input type="radio" name="post_type" id="tutorial" value="tutorial" hidden>
+                        <label for="tutorial">Tutorial</label>
+                      
+                        <input type="radio" name="post_type" id="project" value="project" hidden>
+                        <label for="project">Project</label>
+                      
+                        <input type="radio" name="post_type" id="discussion" value="discussion" hidden>
+                        <label for="discussion">Discussion</label>
+                      
+                        <input type="radio" name="post_type" id="news" value="news" hidden>
+                        <label for="news">News</label>
+                      
+                        <input type="radio" name="post_type" id="idea" value="idea" hidden>
+                        <label for="idea">Idea</label>
+                      
+                        <input type="radio" name="post_type" id="question" value="question" hidden>
+                        <label for="question">Question</label>
+                      
+                        <input type="radio" name="post_type" id="guide" value="guide" hidden>
+                        <label for="guide">Guide</label>
+                      
+                        <input type="radio" name="post_type" id="opinion" value="opinion" hidden>
+                        <label for="opinion">Opinion</label>
+                      
+                        <input type="radio" name="post_type" id="career" value="career" hidden>
+                        <label for="career">Career</label>
+
+                        <input type="radio" name="post_type" id="career" value="career" hidden>
+                        <label for="career">Other</label>
+                      </div>
+                      <br>
+                    <div class="file-upload">
+                        <label for="post-image">
+                            <i class="fas fa-image"></i> Add an image to your post (optional)
+                        </label>
+                        <input type="file" id="post-image" name="imageUrl" enctype="multipart/form-data" />
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="secondary-btn close-modal">Cancel</button>
+                        <button type="submit" class="primary-btn"><i class="fas fa-paper-plane"></i> Publish</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const dropdown = document.getElementById("notificationDropdown");
+            const toggle = dropdown.querySelector(".dropdown-toggle");
+      
+            toggle.addEventListener("click", function (e) {
+                e.preventDefault();
+                dropdown.classList.toggle("open");
+            });
+      
+            // Close dropdown when clicking outside
+            document.addEventListener("click", function (e) {
+                if (!dropdown.contains(e.target)) {
+                    dropdown.classList.remove("open");
+                }
+            });
+        });
+      </script>
+
+        <script>
+            // Modal functionality
+            var modal = document.getElementById("postModal");
+            var openModalBtn = document.getElementById("openPostModal");
+            var openModalButtonHeader = document.getElementById("openPostModalButton");
+            var emptyStateButton = document.getElementById("emptyStatePostButton");
+            var closeBtn = document.getElementsByClassName("close")[0];
+            var cancelBtn = document.getElementsByClassName("close-modal")[0];
+
+            // Open modal when buttons are clicked
+            if (openModalBtn) {
+                openModalBtn.onclick = function () {
+                    modal.style.display = "block";
+                };
+            }
+
+            if (openModalButtonHeader) {
+                openModalButtonHeader.onclick = function () {
+                    modal.style.display = "block";
+                };
+            }
+
+            if (emptyStateButton) {
+                emptyStateButton.onclick = function () {
+                    modal.style.display = "block";
+                };
+            }
+
+            // Close modal when X is clicked
+            if (closeBtn) {
+                closeBtn.onclick = function () {
+                    modal.style.display = "none";
+                };
+            }
+
+            // Close modal when Cancel is clicked
+            if (cancelBtn) {
+                cancelBtn.onclick = function () {
+                    modal.style.display = "none";
+                };
+            }
+
+            // Close modal when clicking outside
+            window.onclick = function (event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            };
+
+            // File upload preview
+            const fileInput = document.getElementById("post-image");
+            const fileLabel = document.querySelector(".file-upload label");
+
+            if (fileInput) {
+                fileInput.addEventListener("change", function () {
+                    if (this.files && this.files[0]) {
+                        const fileName = this.files[0].name;
+                        fileLabel.innerHTML = `<i class="fas fa-check"></i> ${fileName} selected`;
+                        fileLabel.style.color = "var(--success)";
+                    } else {
+                        fileLabel.innerHTML = `<i class="fas fa-image"></i> Add an image to your post (optional)`;
+                        fileLabel.style.color = "var(--text)";
+                    }
+                });
+            }
+
+            document.addEventListener("DOMContentLoaded", function () {
+                const followersModal = document.getElementById("followersModal");
+                const closeBtnFollower = document.getElementById("closeFollowersModal");
+                const followingsModal = document.getElementById("followingsModal");
+                const closeBtnFollowing = document.getElementById("closeFollowingsModal");
+                // Open modal function
+                window.openFollowersModal = function () {
+                    followersModal.style.display = "block";
+                };
+                window.openFollowingsModal = function () {
+                    followingsModal.style.display = "block";
+                };
+                // Close modal when clicking ❌
+                closeBtnFollower.addEventListener("click", function () {
+                    followersModal.style.display = "none";
+                });
+                closeBtnFollowing.addEventListener("click", function () {
+                    followingsModal.style.display = "none";
+                });
+                // Optional: Close when clicking outside the modal content
+                window.addEventListener("click", function (event) {
+                    if (event.target === followersModal) {
+                        followersModal.style.display = "none";
+                    }
+                });
+                window.addEventListener("click", function (event) {
+                    if (event.target === followingsModal) {
+                        followingsModal.style.display = "none";
+                    }
+                });
+            });
+        </script>
+    </body>
+    <div id="mobile-warning">This site is not made for mobile phones</div>
+</html>

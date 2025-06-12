@@ -5,19 +5,22 @@ from django.utils import timezone
 from datetime import date
 
 class User(Document):
-    username = StringField(required=True,unique=True)
-    password = StringField(required=True)
+    username = StringField(unique=True)
+    password = StringField()
     email = EmailField(required=True,unique=True)
     bio = StringField(default="hey there i'm using social media platform")
     followings = ListField(ReferenceField('User'))
     followers = ListField(ReferenceField('User'))
-    profilePicUrl = StringField(default="")
+    profilePicUrl = StringField(default="https://res.cloudinary.com/dei7arqb7/image/upload/v1749276806/s38levwhxowaxacwwszy.webp")
     posts = ListField(ReferenceField('Post'))
     questions = ListField(ReferenceField('QnA'))
     created_at = DateTimeField(default=timezone.now)
     updated_at = DateTimeField(default=timezone.now)
     is_active = BooleanField(default=True)
+    auth_provider = StringField(choices=["github","google","x","facebook","manual"],default="manual",required=True)
     meta = {'collection': 'users'}
+    notifications=BooleanField(default=True)
+    newsletter=BooleanField(default=True)
 
 class Post(Document):
     image_url = StringField(required=False)
@@ -78,13 +81,21 @@ class Contact(Document):
 
 
 class Article(Document):
-    title = StringField(max_length=100, default="")
-    description = StringField(max_length=200, default="")
-    topic = ListField(StringField(max_length=20, default=""))
-    imageUrl = ListField(StringField())
+    title = StringField(max_length=1000, default="")
+    description = StringField(max_length=10000, default="")
+    content = StringField(default="")
+    topic = StringField(max_length=50)
+    imageUrl = StringField(max_length=100)
+    source = StringField(max_length=100)
+    no_of_views=IntField(default=0)
+    created_at = DateTimeField(default=timezone.now) 
 
 
 class Utility(Document):
+    icon = StringField(max_length=100)
     name = StringField(max_length=40, default="NULL")
     desc = StringField(max_length=200, default="NULL")
+    url = StringField(max_length=200, default="NULL")
+    downloads = IntField(default=0)
+    
     

@@ -8,4 +8,4 @@ def to_objectid(value):
     try:
         return ObjectId(value)
     except:
-        return None  # Return None if conversion fails
+        return None

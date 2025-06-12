@@ -12,113 +12,143 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 from mongoengine import connect
+from elasticsearch import Elasticsearch
 import os
+import environ
 
+env = environ.Env()
+environ.Env.read_env()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-MONGO_URI = "mongodb+srv://patelvishw596:Vkp8989@cluster0.slx1g.mongodb.net/python-community"
+# connection to the mongo
+MONGO_URI = (
+    "mongodb+srv://patelvishw596:Vkp8989@cluster0.slx1g.mongodb.net/python-community"
+)
 connect(host=MONGO_URI)
 
-SECRET_KEY = 'django-insecure-0pfz8hbbu^%f#vj^t=n_qi^x7ymd@j-(y2e9=y2v2n+_k)(x0s'
+# connection to elasticsearch
+ES_USERNAME = env("ES_USERNAME")
+ES_PASSWORD = env("ES_PASSWORD")
 
-DEBUG = False
+ELASTIC_SEARCH_HOST = {
+    "default": {
+        "hosts": "https://34.10.231.119:9200",
+        "http_auth": (env("ES_USERNAME"), env("ES_PASSWORD")),
+        "verify_certs": False,
+    }
+}
+ELASTICSEARCH_DSL = {
+    "default": {
+        "hosts": "https://34.10.231.119:9200",
+        "http_auth": (env("ES_USERNAME"), env("ES_PASSWORD")),
+        "verify_certs": False,
+    }
+}
 
-ALLOWED_HOSTS = ['*']
+SECRET_KEY = "django-insecure-0pfz8hbbu^%f#vj^t=n_qi^x7ymd@j-(y2e9=y2v2n+_k)(x0s"
 
-CSRF_TRUSTED_ORIGINS = [
-    "http://127.0.0.1:8000",
-    "http://localhost:8000"  
-]
+DEBUG = True
+
+ALLOWED_HOSTS = ["*"]
+
+CSRF_TRUSTED_ORIGINS = ["http://127.0.0.1:8000", "http://localhost:8000","https://34.10.231.119"]
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'app',
-    'corsheaders',
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+    "app",
+    "corsheaders",
+    "article",
+    "qna",
+    "post",
+    "userProfile",
+    "utils",
+    "customAuth",
+    "ai",
 ]
 
-CORS_ALLOW_ALL_ORIGINS = True  
+CORS_ALLOW_ALL_ORIGINS = True
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
-    'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
 CSRF_COOKIE_HTTPONLY = False
-CSRF_COOKIE_SECURE =False
-ROOT_URLCONF = 'Python_World.urls'
+CSRF_COOKIE_SECURE = False
+ROOT_URLCONF = "Python_World.urls"
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR,"app/templates")],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [os.path.join(BASE_DIR, "app/templates")],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = 'Python_World.wsgi.application'
+WSGI_APPLICATION = "Python_World.wsgi.application"
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
 }
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = "UTC"
 
 USE_I18N = True
 
 USE_TZ = True
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'official.pythonworld@gmail.com'
-EMAIL_HOST_PASSWORD = 'zfys shhx ybfe hsxh'
+EMAIL_HOST_USER = "official.pythonworld@gmail.com"
+EMAIL_HOST_PASSWORD = "zfys shhx ybfe hsxh"
 
-STATIC_URL = 'static/'
+STATIC_URL = "static/"
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 STATICFILES_DIRS = [
     BASE_DIR / "app/static",
 ]
@@ -128,8 +158,25 @@ import cloudinary
 import cloudinary.uploader
 import cloudinary.api
 
-cloudinary.config( 
-  cloud_name = 'dei7arqb7', 
-  api_key = '228262976245473', 
-  api_secret = 'g8k8t6a03lwMt3diq-Peuy3Vxl4' 
+cloudinary.config(
+    cloud_name="dei7arqb7",
+    api_key="228262976245473",
+    api_secret="g8k8t6a03lwMt3diq-Peuy3Vxl4",
 )
+
+GOOGLE_CLIENT_ID = env("GOOGLE_CLIENT_ID")
+GOOGLE_CLIENT_SECRET = env("GOOGLE_CLIENT_SECRET")
+GOOGLE_META_URL = env("GOOGLE_META_URL")
+DJANGO_SECRET = env("DJANGO_SECRET")
+GOOGLE_REDIRECT_URL = env("GOOGLE_REDIRECT_URL")
+GITHUB_CLIENT_ID = env("GITHUB_CLIENT_ID")
+GITHUB_CLIENT_SECRET = env("GITHUB_CLIENT_SECRET")
+GITHUB_REDIRECT_URL = env("GITHUB_REDIRECT_URL")
+GITHUB_API_URL = env("GITHUB_API_URL")
+X_CLIENT_ID = env("X_CLIENT_ID")
+X_CLIENT_SECRET = env("X_CLIENT_SECRET")
+X_REQUEST_TOKEN_URL = env("X_REQUEST_TOKEN_URL")
+X_AUTHORIZE_URL = env("X_AUTHORIZE_URL")
+X_ACCESS_TOKEN_URL = env("X_ACCESS_TOKEN_URL")
+X_CALLBACK_URI = env("X_CALLBACK_URI")
+X_API_URL = env("X_API_URL")

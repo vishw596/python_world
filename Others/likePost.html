@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python World Notification</title>
+</head>
+<body style="margin: 0; padding: 20px; font-family: Arial, Helvetica, sans-serif; background-color: #f8fafc; color: #1e293b; line-height: 1.6;">
+    <!-- Main Container -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="width: 100%; max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); overflow: hidden;">
+        <!-- Header -->
+        <tr>
+            <td style="background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); padding: 40px 30px; text-align: center; color: white;">
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="width: 100%;">
+                    <tr>
+                        <td style="text-align: center;">
+                            <!-- Logo -->
+                            <div style="font-size: 28px; font-weight: bold; margin-bottom: 8px;">
+                                <span style="color: #ffffff;">Python</span>
+                                <span style="color:rgb(16, 185, 86);"> World</span>
+                            </div>
+                            <!-- Tagline -->
+                            <p style="margin: 0; font-size: 16px; opacity: 0.9;">Where Python Meets the World</p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        
+        <!-- Main Content -->
+        <tr>
+            <td style="padding: 40px 30px;">
+                <!-- Notification Card -->
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="width: 100%; background-color: #f8fafc; border-radius: 12px; border: 2px solid #e2e8f0;">
+                    <tr>
+                        <td style="padding: 24px;">
+                            <!-- Greeting -->
+                            <p style="margin: 0 0 20px 0; font-size: 18px; color: #1e293b;">
+                                Hi <span style="color: #10b981; font-weight: bold;">{{post.posted_by.username}}</span>,
+                            </p>
+                            
+                            <!-- Notification Content -->
+                            <div style="background: linear-gradient(135deg, #dbeafe 0%, #e0e7ff 100%); border-left: 4px solid #3b82f6; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                                <p style="margin: 0; font-size: 16px; color: #1e293b;">
+                                    <strong style="color: #7c3aed;">Someone</strong> liked your post titled: 
+                                    <br><span style="color: #3b82f6; font-weight: bold; font-style: italic; font-size: 17px;">"{{post.title}}"</span>
+                                </p>
+                            </div>
+                            
+                            <!-- Encouragement Text -->
+                            <p style="margin: 20px 0; color: #64748b; font-size: 15px; text-align: center;">
+                                Your content is making an impact in the Python community! 🎉
+                            </p>
+                            
+                            <!-- CTA Button -->
+                            <div style="text-align: center; margin: 30px 0;">
+                                <a href="pythonworld.mooo.com/profile/{{user.username}}" style="display: inline-block; background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); color: white; padding: 14px 28px; border-radius: 25px; text-decoration: none; font-weight: bold; font-size: 16px; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);">
+                                    View Your Post →
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                
+                <!-- Divider -->
+                <div style="height: 1px; background: linear-gradient(90deg, transparent, #e2e8f0, transparent); margin: 30px 0;"></div>
+                
+                <!-- Additional Content -->
+                <div style="text-align: center; margin: 30px 0;">
+                    <div style="background-color: #f1f5f9; padding: 20px; border-radius: 10px; border: 1px solid #e2e8f0;">
+                        <p style="margin: 0 0 12px 0; color: #475569; font-size: 16px; font-weight: bold;">
+                            🚀 Keep Growing Your Python Skills!
+                        </p>
+                        <p style="margin: 0; color: #64748b; font-size: 14px;">
+                            Keep sharing your knowledge and connecting with fellow developers!
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Stats Section -->
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="width: 100%; margin: 20px 0;">
+                    <tr>
+                        <td style="width: 33.33%; text-align: center; padding: 15px; background-color: #fef3c7; border-radius: 8px;">
+                            <div style="font-size: 24px; margin-bottom: 5px;">34</div>
+                            <div style="font-size: 12px; color: #92400e;">LIKES</div>
+                        </td>
+                        <td style="width: 33.33%; text-align: center; padding: 15px;">
+                            <div style="font-size: 24px; margin-bottom: 5px;">2</div>
+                            <div style="font-size: 12px; color:rgb(28, 73, 146);">COMMENTS</div>
+                        </td>
+                        <td style="width: 33.33%; text-align: center; padding: 15px; background-color: #dcfce7; border-radius: 8px;">
+                            <div style="font-size: 24px; margin-bottom: 5px;">4</div>
+                            <div style="font-size: 12px; color: #166534;">SHARES</div>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        
+        <!-- Footer -->
+        <tr>
+            <td style="background-color: #1e293b; padding: 30px; text-align: center; color: #94a3b8;">
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="width: 100%;">
+                    <tr>
+                        <td style="text-align: center;">
+                            <!-- Social Links -->
+                            <div style="margin-bottom: 20px;">
+                                <a href="#" style="display: inline-block; width: 40px; height: 40px; background-color: #374151; border-radius: 50%; text-decoration: none; margin: 0 8px; line-height: 40px; color: #9ca3af;">📧</a>
+                                <a href="#" style="display: inline-block; width: 40px; height: 40px; background-color: #374151; border-radius: 50%; text-decoration: none; margin: 0 8px; line-height: 40px; color: #9ca3af;">🐦</a>
+                                <a href="#" style="display: inline-block; width: 40px; height: 40px; background-color: #374151; border-radius: 50%; text-decoration: none; margin: 0 8px; line-height: 40px; color: #9ca3af;">X</a>
+                            </div>
+                            
+                            <!-- Footer Text -->
+                            <p style="margin: 0 0 10px 0; font-size: 14px; color: #9ca3af;">
+                                This is an automatic notification from Python World
+                            </p>
+                            <p style="margin: 0 0 15px 0; font-size: 12px; color: #6b7280;">
+                                © 2025 Python World. All rights reserved.
+                            </p>
+                            
+                            <!-- Unsubscribe -->
+                            <p style="margin: 0; font-size: 11px; color: #6b7280;">
+                                <a href="#" style="color: #9ca3af; text-decoration: underline;">Unsubscribe</a> | 
+                                <a href="#" style="color: #9ca3af; text-decoration: underline;">Update Preferences</a>
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+    
+    <!-- Mobile Styles -->
+    <style>
+        @media only screen and (max-width: 600px) {{
+            .email-container {{
+                width: 100% !important;
+                margin: 10px !important;
+            }}
+            .header-padding {{
+                padding: 30px 20px !important;
+            }}
+            .content-padding {{
+                padding: 30px 20px !important;
+            }}
+            .logo-text {{
+                font-size: 24px !important;
+            }}
+        }}
+    </style>
+</body>
+</html>

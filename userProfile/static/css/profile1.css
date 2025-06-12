@@ -1,0 +1,90 @@
+.trending-number {
+    padding: 0;
+    opacity: 1;
+    min-width: unset;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid var(--accent);
+    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.follower-avatar {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+/* Make the name and handle spacing tighter for followers */
+.trending-content h4 {
+    margin: 0;
+    font-size: 0.95rem;
+    color: var(--text);
+}
+
+.trending-meta {
+    margin: 0;
+    color: var(--text-dim);
+    font-size: 0.8rem;
+}
+/* Avatar in place of .trending-number */
+.trending-number {
+    padding: 0;
+    min-width: 42px;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid var(--accent);
+    box-shadow: 0 2px 6px rgba(99, 102, 241, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.follower-avatar {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+/* Username only */
+.trending-content h4 {
+    font-size: 0.95rem;
+    margin: 0;
+    color: var(--text);
+}
+
+/* Remove unused metadata styling */
+.trending-meta {
+    display: none;
+}
+
+.scrollable-followers {
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* previour trending topics styles*/
+/* .trending-list,

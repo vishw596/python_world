@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Lost in Cyberspace</title>
+    <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #2ecc71;
+            --dark-bg: #0f172a;
+            --darker-bg: #020617;
+            --card-bg: #1e293b;
+            --text: #e2e8f0;
+            --text-dim: #94a3b8;
+            --accent: #6366f1;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--darker-bg) 0%, var(--dark-bg) 100%);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+        }
+
+        .error-code {
+            font-size: 8rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            animation: glitch 2s infinite;
+        }
+
+        @keyframes glitch {
+            0%, 100% { transform: translateX(0); }
+            10% { transform: translateX(-2px) translateY(1px); }
+            20% { transform: translateX(2px) translateY(-1px); }
+            30% { transform: translateX(-1px) translateY(2px); }
+            40% { transform: translateX(1px) translateY(-2px); }
+            50% { transform: translateX(-2px) translateY(1px); }
+        }
+
+        .bot-container {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bot-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .bot-face {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            animation: bounce 2s infinite;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .bot-face:hover {
+            transform: scale(1.1);
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        .chat-bubble {
+            background: var(--darker-bg);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            position: relative;
+            border-left: 4px solid var(--accent);
+            animation: fadeInUp 0.5s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .chat-bubble::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: -8px;
+            width: 0;
+            height: 0;
+            border-top: 8px solid transparent;
+            border-bottom: 8px solid transparent;
+            border-right: 8px solid var(--darker-bg);
+        }
+
+        .bot-message {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .input-container {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .user-input {
+            flex: 1;
+            min-width: 200px;
+            padding: 1rem;
+            border: 2px solid var(--card-bg);
+            border-radius: 10px;
+            background: var(--dark-bg);
+            color: var(--text);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .user-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 10px rgba(99, 102, 241, 0.3);
+        }
+
+        .send-btn {
+            padding: 1rem 2rem;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .send-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.4);
+        }
+
+        .send-btn:active {
+            transform: translateY(0);
+        }
+
+        .typing-indicator {
+            display: none;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 1rem 0;
+            color: var(--text-dim);
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 4px;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent);
+            animation: typing 1.4s infinite ease-in-out;
+        }
+
+        .dot:nth-child(1) { animation-delay: -0.32s; }
+        .dot:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes typing {
+            0%, 80%, 100% {
+                transform: scale(0);
+                opacity: 0.5;
+            }
+            40% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .home-btn {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 1rem 2rem;
+            background: var(--secondary);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .home-btn:hover {
+            background: #27ae60;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(46, 204, 113, 0.4);
+        }
+
+        .floating-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .shape {
+            position: absolute;
+            opacity: 0.1;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .shape:nth-child(1) {
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .shape:nth-child(2) {
+            top: 60%;
+            right: 10%;
+            animation-delay: 2s;
+        }
+
+        .shape:nth-child(3) {
+            bottom: 20%;
+            left: 20%;
+            animation-delay: 4s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        @media (max-width: 768px) {
+            .error-code {
+                font-size: 6rem;
+            }
+            
+            .input-container {
+                flex-direction: column;
+            }
+            
+            .send-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-shapes">
+        <div class="shape" style="width: 100px; height: 100px; background: linear-gradient(45deg, var(--primary), var(--accent)); border-radius: 50%;"></div>
+        <div class="shape" style="width: 80px; height: 80px; background: linear-gradient(45deg, var(--secondary), var(--primary)); border-radius: 10px;"></div>
+        <div class="shape" style="width: 60px; height: 60px; background: linear-gradient(45deg, var(--accent), var(--secondary)); border-radius: 50%;"></div>
+    </div>
+
+    <div class="container">
+        <div class="error-code">404</div>
+        
+        <div class="bot-container">
+            <div class="bot-face" id="botFace">🤖</div>
+            
+            <div class="chat-bubble">
+                <div class="bot-message" id="botMessage">
+                    Well, well, well... Look who's lost in the digital wilderness! 🌐<br>
+                    I'm RoboGuide, your friendly neighborhood 404 bot. <br>
+                    <strong>So... what brings you to this corner of nowhere?</strong>
+                </div>
+                
+                <div class="typing-indicator" id="typingIndicator">
+                    <span>RoboGuide is thinking</span>
+                    <div class="typing-dots">
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                    </div>
+                </div>
+                
+                <div class="input-container" id="inputContainer">
+                    <input type="text" class="user-input" id="userInput" placeholder="Tell me your story, lost traveler..." maxlength="100">
+                    <button class="send-btn" id="sendBtn">Send</button>
+                </div>
+            </div>
+        </div>
+        
+        <a href="/" class="home-btn">Take Me Home</a>
+    </div>
+
+    <script>
+        const botFace = document.getElementById('botFace');
+        const botMessage = document.getElementById('botMessage');
+        const userInput = document.getElementById('userInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const typingIndicator = document.getElementById('typingIndicator');
+        const inputContainer = document.getElementById('inputContainer');
+
+        // Configuration for Gemini AI
+        const GEMINI_API_KEY = 'AIzaSyCKUnoBceGG7HLXpePDGoPbNW0TpQwuPvY';
+        const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
+
+        const botFaces = ['🤖', '🤓', '😎', '🤔', '😂', '🙃', '😮', '🤯', '😇', '🤪', '🚀', '👾', '🎭', '🤯'];
+        
+        // Fallback responses in case AI fails
+        const fallbackResponses = [
+            "Oops! My AI brain had a glitch 🤖💨 But hey, you're still lost and I'm still here!",
+            "My circuits are overheating from your amazing question! 🔥 Try again?",
+            "Error 404: AI response not found! 😅 The irony is not lost on me...",
+            "My neural networks are taking a coffee break ☕ But you're still stuck with me!"
+        ];
+
+        let conversationCount = 0;
+
+        function getRandomBotFace() {
+            return botFaces[Math.floor(Math.random() * botFaces.length)];
+        }
+
+        function getRandomFallback() {
+            return fallbackResponses[Math.floor(Math.random() * fallbackResponses.length)];
+        }
+
+        async function getAIResponse(userText) {
+            const SYSTEM_PROMPT = `You are RoboGuide, a sassy and funny 404 error page bot. Someone landed on a 404 page and told you: "${userText}". 
+            
+            Respond in a humorous, witty way (max 50 words) that:
+            - Acknowledges what they said
+            - Makes fun of the 404 situation
+            - Uses emojis
+            - Is friendly but sarcastic
+            - References being lost on the internet
+            - Don't be too helpful, be entertaining
+            
+            Examples of your personality:
+            - "Lost? In 2025? Don't you have GPS for websites? 📱"
+            - "Curiosity killed the cat, but satisfaction brought it back! 🐱"
+            - "Work brought you here? That's either dedication or really bad luck! 💼😅"
+            
+            Keep it short, punchy, and hilarious!`;
+
+            try {
+                const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{
+                                text: SYSTEM_PROMPT
+                            }]
+                        }]
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                
+                if (data.candidates && data.candidates[0] && data.candidates[0].content) {
+                    return data.candidates[0].content.parts[0].text.trim();
+                } else {
+                    throw new Error('Invalid response format');
+                }
+            } catch (error) {
+                console.error('AI Error:', error);
+                return getRandomFallback();
+            }
+        }
+
+        function showTypingIndicator() {
+            typingIndicator.style.display = 'flex';
+            inputContainer.style.display = 'none';
+        }
+
+        function hideTypingIndicator() {
+            typingIndicator.style.display = 'none';
+            inputContainer.style.display = 'flex';
+        }
+
+        async function sendMessage() {
+            const userText = userInput.value.trim();
+            if (!userText) return;
+
+            // Disable input while processing
+            sendBtn.disabled = true;
+            sendBtn.textContent = 'Thinking...';
+            conversationCount++;
+            
+            // Show typing indicator
+            showTypingIndicator();
+            
+            try {
+                // Get AI response
+                const aiResponse = await getAIResponse(userText);
+                
+                // Change bot face
+                botFace.textContent = getRandomBotFace();
+                
+                // Format response based on conversation count
+                let finalResponse;
+                if (conversationCount === 1) {
+                    finalResponse = `<strong>"${userText}"</strong><br><br>${aiResponse}<br><br>🎭 Want to chat more or ready to escape this digital limbo?`;
+                } else if (conversationCount >= 4) {
+                    finalResponse = `${aiResponse}<br><br>🤖 Wow, you really like talking to broken websites! I'm flattered, but maybe it's time to find what you were actually looking for? 😄`;
+                } else {
+                    finalResponse = `${aiResponse}<br><br>🚀 Got more stories from your digital adventures?`;
+                }
+                
+                botMessage.innerHTML = finalResponse;
+                
+            } catch (error) {
+                console.error('Error:', error);
+                botMessage.innerHTML = getRandomFallback();
+            } finally {
+                hideTypingIndicator();
+                userInput.value = '';
+                sendBtn.disabled = false;
+                sendBtn.textContent = 'Send';
+                userInput.placeholder = conversationCount >= 3 ? 
+                    "Still talking to a 404 page? I love it! 😄" : 
+                    "Tell me more, digital wanderer...";
+            }
+        }
+
+        sendBtn.addEventListener('click', sendMessage);
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !sendBtn.disabled) {
+                sendMessage();
+            }
+        });
+
+        // Fun bot face clicking with AI personality
+        botFace.addEventListener('click', async () => {
+            const faces = ['🤖', '🎭', '🤪', '😎', '🚀'];
+            botFace.textContent = faces[Math.floor(Math.random() * faces.length)];
+            botFace.style.transform = 'scale(1.2)';
+            
+            // Random click responses
+            const clickResponses = [
+                "Hey! That tickles my circuits! 🤖✨",
+                "Boop! You found my on/off switch! 😄",
+                "Stop that! I'm trying to look professional here! 🎭",
+                "Click me again and I'll start charging rent! 💰",
+                "I'm not a button, I'm a sophisticated AI! ...okay maybe a little button 🔘"
+            ];
+            
+            const randomResponse = clickResponses[Math.floor(Math.random() * clickResponses.length)];
+            const currentMessage = botMessage.innerHTML;
+            botMessage.innerHTML = `<em style="color: var(--accent);">${randomResponse}</em><br><br>${currentMessage}`;
+            
+            setTimeout(() => {
+                botFace.style.transform = 'scale(1)';
+            }, 200);
+        });
+
+        // Auto-focus input
+        userInput.focus();
+
+        // Easter egg - Konami code for special AI response
+        let konamiCode = '';
+        const targetCode = 'ArrowUpArrowUpArrowDownArrowDownArrowLeftArrowRightArrowLeftArrowRightba';
+        
+        document.addEventListener('keydown', async (e) => {
+            konamiCode += e.code;
+            if (konamiCode.length > targetCode.length) {
+                konamiCode = konamiCode.slice(-targetCode.length);
+            }
+            
+            if (konamiCode === targetCode) {
+                showTypingIndicator();
+                const specialResponse = await getAIResponse("Someone just entered the Konami code on a 404 page");
+                botMessage.innerHTML = `🎮 <strong>KONAMI CODE DETECTED!</strong><br><br>${specialResponse}<br><br>🏆 Achievement Unlocked: 404 Gaming Master!`;
+                hideTypingIndicator();
+                botFace.textContent = '🎮';
+                konamiCode = '';
+            }
+        });
+    </script>
+</body>
+</html>

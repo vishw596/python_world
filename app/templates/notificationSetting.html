@@ -1,0 +1,679 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notification Preferences - Python World</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #0f172a;
+            color: #e2e8f0;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #3498db, #6366f1);
+            padding: 40px 32px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+        
+        @keyframes shimmer {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(180deg); }
+        }
+        
+        .logo {
+            position: relative;
+            z-index: 2;
+            margin-bottom: 16px;
+        }
+        
+        .logo .icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            color: #ffd43b;
+        }
+        
+        .logo h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #093793;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin: 0;
+        }
+        
+        .logo span {
+            color:rgb(9, 181, 64);
+        }
+        
+        .subtitle {
+            color: white;
+            font-size: 18px;
+            font-weight: 500;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 2;
+            margin: 0;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .welcome-section {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        
+        .settings-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.8;
+        }
+        
+        .title {
+            font-size: 24px;
+            color: #e2e8f0;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        
+        .description {
+            font-size: 16px;
+            color: #94a3b8;
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+        
+        .notification-sections {
+            display: grid;
+            gap: 24px;
+        }
+        
+        .notification-card {
+            background-color: rgba(30, 41, 59, 0.8);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 24px;
+            transition: all 0.3s ease;
+        }
+        
+        .notification-card:hover {
+            background-color: rgba(30, 41, 59, 0.9);
+            border-color: rgba(52, 152, 219, 0.3);
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .card-icon {
+            font-size: 24px;
+            margin-right: 12px;
+        }
+        
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #e2e8f0;
+            margin: 0;
+        }
+        
+        .card-description {
+            font-size: 14px;
+            color: #94a3b8;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        
+        .notification-options {
+            display: grid;
+            gap: 12px;
+        }
+        
+        .option-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            background: linear-gradient(135deg, rgba(52, 152, 219, 0.05), rgba(99, 102, 241, 0.05));
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .option-row:hover {
+            background: linear-gradient(135deg, rgba(52, 152, 219, 0.1), rgba(99, 102, 241, 0.1));
+            border-color: rgba(52, 152, 219, 0.2);
+        }
+        
+        .option-info {
+            flex: 1;
+        }
+        
+        .option-name {
+            font-weight: 500;
+            color: #e2e8f0;
+            margin-bottom: 4px;
+        }
+        
+        .option-desc {
+            font-size: 12px;
+            color: #94a3b8;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 24px;
+            background-color: #334155;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .toggle-switch.active {
+            background: linear-gradient(135deg, #3498db, #6366f1);
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background-color: white;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .toggle-switch.active .toggle-slider {
+            transform: translateX(26px);
+        }
+        
+        .master-controls {
+            background: linear-gradient(135deg, rgba(46, 204, 113, 0.1), rgba(52, 152, 219, 0.1));
+            border: 1px solid rgba(46, 204, 113, 0.2);
+            margin-bottom: 24px;
+        }
+        
+        .master-controls .card-title {
+            color: #2ecc71;
+        }
+        
+        .quick-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+            justify-content: center;
+        }
+        
+        .quick-btn {
+            padding: 10px 20px;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-mute-all {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+        
+        .btn-mute-all:hover {
+            background: rgba(239, 68, 68, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .btn-unmute-all {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+        
+        .btn-unmute-all:hover {
+            background: rgba(34, 197, 94, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .save-section {
+            margin-top: 32px;
+            text-align: center;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .btn {
+            padding: 14px 28px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-block;
+            margin: 0 8px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #3498db, #6366f1);
+            color: white;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(99, 102, 241, 0.4);
+        }
+        
+        .btn-secondary {
+            background: rgba(30, 41, 59, 0.8);
+            color: #94a3b8;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(30, 41, 59, 1);
+            color: #e2e8f0;
+            transform: translateY(-2px);
+        }
+        
+        .footer {
+            background-color: #020617;
+            padding: 24px;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .footer-text {
+            font-size: 14px;
+            color: #64748b;
+            margin-bottom: 8px;
+        }
+        
+        .back-link {
+            color: #3498db;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s ease;
+        }
+        
+        .back-link:hover {
+            color: #2ecc71;
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 600px) {
+            .container {
+                margin: 10px;
+                border-radius: 12px;
+            }
+            
+            .header, .content {
+                padding: 24px 20px;
+            }
+            
+            .logo h1 {
+                font-size: 24px;
+            }
+            
+            .logo .icon {
+                font-size: 40px;
+            }
+            
+            .subtitle {
+                font-size: 16px;
+            }
+            
+            .settings-icon {
+                font-size: 40px;
+            }
+            
+            .title {
+                font-size: 20px;
+            }
+            
+            .description {
+                font-size: 14px;
+            }
+            
+            .notification-card {
+                padding: 20px;
+            }
+            
+            .card-title {
+                font-size: 16px;
+            }
+            
+            .card-description {
+                font-size: 13px;
+            }
+            
+            .option-row {
+                padding: 10px 12px;
+            }
+            
+            .option-name {
+                font-size: 14px;
+            }
+            
+            .option-desc {
+                font-size: 11px;
+            }
+            
+            .quick-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .quick-btn {
+                width: 100%;
+                max-width: 200px;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 200px;
+                padding: 12px 20px;
+                font-size: 14px;
+                margin: 4px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">
+                {% comment %} <img src="{% static 'images/logo.png' %}" style="width: 50px; height: 50px;border-radius: 50%;" alt="Python World Logo"> {% endcomment %}
+                <h1>Python<span> World</span></h1>
+            </div>
+            <p class="subtitle">Notification Preferences</p>
+        </div>
+        
+        <!-- Content -->
+        <div class="content">
+            <div class="welcome-section">
+                <div class="settings-icon">⚙️</div>
+                <h2 class="title">Customize Your Notifications</h2>
+                <p class="description">
+                    Control what notifications you receive and how often. 
+                    Stay updated on what matters most to you in the Python community.
+                </p>
+            </div>
+            
+            <!-- Master Controls -->
+            <div class="notification-card master-controls">
+                <div class="card-header">
+                    <div class="card-icon">🔔</div>
+                    <h3 class="card-title">Master Controls</h3>
+                </div>
+                <p class="card-description">Quick actions to manage all your notifications at once</p>
+                
+                <div class="quick-actions">
+                    <button class="quick-btn btn-mute-all" onclick="muteAll()">
+                        🔇 Mute All Notifications
+                    </button>
+                    <button class="quick-btn btn-unmute-all" onclick="unmuteAll()">
+                        🔔 Enable All Notifications
+                    </button>
+                </div>
+            </div>
+            
+            <form action="" method="post">
+                {% csrf_token %}
+            <div class="notification-sections">
+                <!-- Email Notifications -->
+                <div class="notification-card">
+                    <div class="card-header">
+                        <div class="card-icon">📧</div>
+                        <h3 class="card-title">Email Notifications</h3>
+                    </div>
+                    <p class="card-description">Manage email notifications sent to your inbox</p>
+                    
+                    <div class="notification-options">
+                        <div class="option-row">
+                            <div class="option-info">
+                                <div class="option-name">📰 Weekly Newsletter</div>
+                                <div class="option-desc">Python news, tutorials, and community highlights</div>
+                            </div>
+                            <input type="hidden" id="newsletter" name="newsletter" value="{{ user.newsletter|yesno:"True,False" }}">
+                            <div class="toggle-switch" data-target="newsletter" onclick="toggleSwitch(this)">
+                                <div class="toggle-slider"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Community Notifications -->
+                <div class="notification-card">
+                    <div class="card-header">
+                        <div class="card-icon">👥</div>
+                        <h3 class="card-title">Community Activity</h3>
+                    </div>
+                    <p class="card-description">Stay connected with the Python World community</p>
+                    
+                    <div class="notification-options">
+                        <div class="option-row">
+                            <div class="option-info">
+                                <div class="option-name">👍 Likes & Comments</div>
+                                <div class="option-desc">When someone comments on your posts or likes the post</div>
+                            </div>
+                            <input type="hidden" id="notifications" name="notifications" value="{{ user.notifications|yesno:"True,False" }}">
+                            <div class="toggle-switch" data-target="notifications" onclick="toggleSwitch(this)">
+                                <div class="toggle-slider"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Save Section -->
+            <div class="save-section">
+                <button class="btn btn-primary" onclick="savePreferences()">
+                    💾 Save All Preferences
+                </button>
+                </form>
+                <a href="http://pythonworld.mooo.com" class="btn btn-secondary">
+                    🏠 Back to Python World
+                </a>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <p class="footer-text">© 2025 Python World. All rights reserved.</p>
+            <a href="http://pythonworld.mooo.com" class="back-link">Return to Python World</a>
+        </div>
+    </div>
+    
+    <script>
+        // Toggle switch functionality
+
+        window.onload = function () {
+            document.querySelectorAll(".toggle-switch").forEach((toggle) => {
+                const inputId = toggle.getAttribute("data-target");
+                const input = document.getElementById(inputId);
+                if (input && input.value === "True") {
+                    toggle.classList.add("active");
+                } else {
+                    toggle.classList.remove("active");
+                }
+            });
+        };
+    
+        // Toggle only the clicked switch
+        function toggleSwitch(element) {
+            const inputId = element.getAttribute("data-target");
+            const input = document.getElementById(inputId);
+    
+            if (input) {
+                input.value = input.value === "True" ? "False" : "True";
+            }
+    
+            element.classList.toggle("active");
+    
+            // Visual feedback
+            element.style.transform = "scale(0.95)";
+            setTimeout(() => {
+                element.style.transform = "scale(1)";
+            }, 150);
+        }
+        
+        // Mute all notifications
+        function muteAll() {
+            const switches = document.querySelectorAll('.toggle-switch');
+            switches.forEach(switchEl => {
+                switchEl.classList.remove('active');
+            });
+            
+            // Show feedback
+            showNotification('🔇 All notifications have been muted', 'warning');
+        }
+        
+        // Unmute all notifications
+        function unmuteAll() {
+            const switches = document.querySelectorAll('.toggle-switch');
+            switches.forEach(switchEl => {
+                switchEl.classList.add('active');
+            });
+            
+            // Show feedback
+            showNotification('🔔 All notifications have been enabled', 'success');
+        }
+        
+        // Save preferences
+        function savePreferences() {
+            const preferences = {};
+            const switches = document.querySelectorAll('.toggle-switch');
+            
+            switches.forEach((switchEl, index) => {
+                const optionName = switchEl.closest('.option-row').querySelector('.option-name').textContent;
+                preferences[optionName] = switchEl.classList.contains('active');
+            });
+            
+            // In a real implementation, you would send this data to your server
+            console.log('Saved preferences:', preferences);
+            
+            // Show success message
+            showNotification('✅ Your notification preferences have been saved successfully!', 'success');
+            
+            // Optional: redirect after save
+            setTimeout(() => {
+                // window.location.href = 'http://pythonworld.mooo.com';
+            }, 2000);
+        }
+        
+        // Show notification feedback
+        function showNotification(message, type) {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 16px 24px;
+                border-radius: 8px;
+                color: white;
+                font-weight: 500;
+                z-index: 1000;
+                transform: translateX(100%);
+                transition: transform 0.3s ease;
+                max-width: 300px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            `;
+            
+            // Set background color based on type
+            if (type === 'success') {
+                notification.style.background = 'linear-gradient(135deg, #22c55e, #16a34a)';
+            } else if (type === 'warning') {
+                notification.style.background = 'linear-gradient(135deg, #f59e0b, #d97706)';
+            } else {
+                notification.style.background = 'linear-gradient(135deg, #3498db, #6366f1)';
+            }
+            
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            // Animate in
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+        
+        // Add click effects to option rows
+        document.querySelectorAll('.option-row').forEach(row => {
+            row.addEventListener('click', () => {
+                const toggle = row.querySelector('.toggle-switch');
+                toggleSwitch(toggle);
+            });
+        });
+        
+        // Initialize with some default states
+        document.addEventListener('DOMContentLoaded', () => {
+            // Add subtle entrance animations
+            const cards = document.querySelectorAll('.notification-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+    </script>
+</body>
+</html>
