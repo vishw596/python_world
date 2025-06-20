@@ -1,0 +1,84 @@
+<div class="card">
+                    <div class="post-header">
+                        <div class="post-avatar">JS</div>
+                        <div class="post-meta">
+                            <div class="post-author">Jake Smith</div>
+                            <div class="post-time">Posted 2 hours ago</div>
+                        </div>
+                        <div class="post-tag">Article</div>
+                    </div>
+                    <div class="post-content">
+                        <h3>Optimizing Python Code Using Vectorization Techniques</h3>
+                        <p>Learn how to harness the power of NumPy for blazing fast numerical operations in Python. This article explores various vectorization techniques that can speed up your code by 100x or more...</p>
+                        <div class="post-image">
+                            <img src="{% static 'image/homePage1st.png' %}" alt="Code optimization visualization" style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                        <div class="post-actions">
+                            <div class="post-action"><i class="fas fa-thumbs-up"></i> 243 Likes</div>
+                            <div class="post-action"><i class="fas fa-comments"></i> 42 Comments</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Post 2 -->
+                <div class="card">
+                    <div class="post-header">
+                        <div class="post-avatar">ML</div>
+                        <div class="post-meta">
+                            <div class="post-author">Maria Lopez</div>
+                            <div class="post-time">Posted 5 hours ago</div>
+                        </div>
+                        <div class="post-tag">Question</div>
+                    </div>
+                    <div class="post-content">
+                        <h3>What's the most efficient way to handle large JSON files in Python?</h3>
+                        <p>I'm working with JSON files that are several GBs in size and regular json.load() is causing memory issues. I've tried streaming parsers but I'm running into other problems. Any recommendations from the community?</p>
+                        <div class="post-actions">
+                            <div class="post-action"><i class="fas fa-thumbs-up"></i> 87 Likes</div>
+                            <div class="post-action"><i class="fas fa-comments"></i> 36 Comments</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+
+
+
+            <div class="sidebar-card">
+                <h3>Developer Utilities</h3>
+                <div class="utility-list">
+                    <div class="utility-item">
+                        <div class="utility-icon"><i class="fas fa-video"></i></div>
+                        <div class="utility-content">
+                            <h4>Screen Recorder</h4>
+                            <div class="utility-desc">Record and share your screen quickly</div>
+                        </div>
+                    </div>
+                    <div class="utility-item">
+                        <div class="utility-icon"><i class="fas fa-list"></i></div>
+                        <div class="utility-content">
+                            <h4>To-Do Manager</h4>
+                            <div class="utility-desc">Track your tasks and projects</div>
+                        </div>
+                    </div>
+                    <div class="utility-item">
+                        <div class="utility-icon"><i class="fas fa-code"></i></div>
+                        <div class="utility-content">
+                            <h4>Regex Tester</h4>
+                            <div class="utility-desc">Build and test regular expressions</div>
+                        </div>
+                    </div>
+                    <div class="utility-item">
+                        <div class="utility-icon"><i class="fas fa-clock"></i></div>
+                        <div class="utility-content">
+                            <h4>Code Timer</h4>
+                            <div class="utility-desc">Benchmark your code snippets</div>
+                        </div>
+                    </div>
+                </div>
+            </div>

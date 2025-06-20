@@ -20,7 +20,7 @@ def post(request):
         title = request.POST.get("title")
         content = request.POST.get("content")
         tags = request.POST.get("post_type")
-        tags = tags.split(",")
+        # tags = tags.split(",")
 
         image = request.FILES.get("imageUrl")
         image_url = ""
@@ -42,10 +42,40 @@ def post(request):
         user.posts.append(post)
         user.save()
 
-    posts = Post.objects()
+    posts = Post.objects().order_by("-created_at")
+    post_type = 'all'
     user = User.objects.get(id=request.session.get("user_id"))
 
-    return render(request, "post.html", {"posts": posts, "user":user})
+    return render(request, "post.html", {"posts": posts, "user":user, "selected_filter": post_type})
+
+def postFilter(request):
+    if "user_id" not in request.session:
+        return redirect("login")
+    
+    post_type = "all"  # default filter
+
+    if request.method == "POST":
+        post_type = request.POST.get("filterBtn", "all")
+
+        if post_type == "new":
+            posts = Post.objects().order_by("-created_at").limit(10)
+        elif post_type == "mostLiked":
+            posts = Post.objects().order_by("-likes").limit(10)
+        elif post_type == "mostShared":
+            posts = Post.objects().order_by("-comments").limit(10)
+        else:
+            post_type = "all"
+            posts = Post.objects().order_by("-created_at")
+    else:
+        posts = Post.objects().order_by("-created_at")
+
+    user = User.objects.get(id=ObjectId(request.session.get("user_id")))
+
+    return render(request, "post.html", {
+        "posts": posts,
+        "user": user,
+        "selected_filter": post_type  # Used to highlight active button
+    })
 
 # LIKE POST
 def like_post(request, post_id): 

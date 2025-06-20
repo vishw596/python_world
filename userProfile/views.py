@@ -27,6 +27,7 @@ def profile(request, username):
     followers = list(reversed(list(user.followers)))
     print(type(followers))
     followings = list(reversed(list(user.followings)))
+    print(followings)
     is_following = session_user in user.followers
 
     print(is_following)
@@ -44,30 +45,41 @@ def profile(request, username):
 def editProfile(request):
     if "user_id" not in request.session:
         return redirect("login")
-    if request.method=="POST":
 
-        user = User.objects.get(id=ObjectId(request.session.get("user_id")))
+    user = User.objects.get(id=ObjectId(request.session.get("user_id")))
 
-        profileImage=""
+    if request.method == "POST":
+        profileImage = ""
 
-        profileImageUrl=request.FILES.get("profileImageUrl")
+        profileImageUrl = request.FILES.get("profilePicUrl")
         if profileImageUrl:
             upload_result = cloudinary.uploader.upload(profileImageUrl)
             profileImage = upload_result.get("secure_url")
-            user.profilePicUrl=profileImage
-
+            user.profilePicUrl = profileImage
 
         if request.POST.get("username"):
-            user.username=request.POST.get("username")
+            user.username = request.POST.get("username")
         if request.POST.get("email"):
-            user.email=request.POST.get("email")
+            user.email = request.POST.get("email")
         if request.POST.get("bio"):
-            user.bio=request.POST.get("bio")
+            user.bio = request.POST.get("bio")
+
         user.save()
         request.session["username"] = user.username
-        return redirect("profile",username=user.username)
+        return redirect("profile", username=user.username)
 
-    return render(request, "editProfile.html")
+    # Handle GET request: return current user data to the template
+    context = {
+        "user_data": {
+            "username": user.username,
+            "email": user.email,
+            "bio": user.bio,
+            "profilePicUrl": user.profilePicUrl
+        }
+    }
+
+    return render(request, "editProfile.html", context)
+
 
 # FOLLOW UNFOLLOW
 def followUnfollow(request, username):

@@ -42,6 +42,7 @@ def see_article(request, article_id):
         return render(request, "404.html", status=404)
 
     if request.method == "POST":
+        print("reached here")
         configure(api_key="AIzaSyCKUnoBceGG7HLXpePDGoPbNW0TpQwuPvY")
         model = GenerativeModel("gemini-1.5-flash")
 

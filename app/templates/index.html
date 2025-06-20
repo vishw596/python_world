@@ -1,13 +1,14 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Python World | Home</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
-    <link rel="icon" href="{% static "image/favicon.ico" %}"type="image/x-icon">
+    <link rel="icon" href="{% static 'image/favicon.ico' %}" type="image/x-icon">
     <link rel="stylesheet" href="{% static 'css/scroll.css' %}" />
     <link rel="stylesheet" href="{% static 'css/index.css' %}" />
     <link rel="stylesheet" href="{% static 'css/uni.css' %}" />
@@ -23,31 +24,35 @@
             transition: 1s;
             background-size: 600% 600%;
             animation: gradientShift 1s linear infinite;
-        }       
+        }
+
         @keyframes gradientShift {
             0% {
                 background-position: 0% 50%;
             }
+
             50% {
                 background-position: 100% 50%;
             }
+
             100% {
                 background-position: 0% 50%;
             }
         }
-        
+
         #gradient-strip {
             opacity: 0;
             height: 0;
             overflow: hidden;
             transition: opacity 0.5s ease, 0.5 out;
         }
+
         #gradient-strip.show {
             opacity: 1;
             height: 7px;
-            bottom:-5px;
+            bottom: -5px;
         }
-        
+
         .info-icon {
             position: fixed;
             top: 15px;
@@ -58,32 +63,36 @@
             padding: 10px;
             width: 40px;
             height: 40px;
+
             border-radius: 50%;
             cursor: pointer;
             z-index: 9999;
             display: flex;
             align-items: center;
             justify-content: center;
-          }
-      
-          .info-icon:hover::after {
-            content: "Press A to speak with AI";
+            transition: .7s;
+        }
+
+        .info-icon:hover::after {
+            content: "Press Shift to speak with AI";
             position: absolute;
-            top: 50%;
-            left: 130%;
-            background: #0f172a;
-            color: #e2e8f0;
+            top: 180%;
+            left: 0%;
+            background: #21f525;
+            border: #3498db;
+            color: #000000;
             padding: 4px 8px;
             border-radius: 4px;
             white-space: nowrap;
             transform: translateY(-50%);
             font-size: 12px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-          }
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        }
     </style>
 </head>
+
 <body>
-    <div class="info-icon" title="Press A to speak with AI">i</div>
+    <div class="info-icon" style="border: 2px solid #3498db;">i</div>
     <form action="{% url 'ai' 'index.html' %}" id="voiceForm" method="POST" style="display:none;">
         {% csrf_token %}
         <input type="hidden" id="questionInput" name="question">
@@ -95,20 +104,29 @@
                 Python<span>World</span>
             </div>
             <div class="search-bar">
-                <input type="text" placeholder="Search for articles, questions, or developers..." />
+                <input type="text" id="searchInput" placeholder="Search for articles, questions, or developers..."
+                     />
             </div>
             <div class="nav-links">
-                <a href="{% url 'feed' %}"> Feed</a>
-                <a href="{% url 'article' %}"> Articles</a>
-                <a href="{% url 'qna' %}"> Q&A</a>
-                <a href="{% url 'utils' %}"> Utilities</a>
+                <a href="{% url 'feed' %}">
+                    <pre><i class="fas fa-rss"></i>  Feed</pre>
+                </a>
+                <a href="{% url 'article' %}">
+                    <pre><i class="fas fa-file-alt"></i>  Articles</pre>
+                </a>
+                <a href="{% url 'qna' %}">
+                    <pre><i class="fas fa-question-circle"></i>  Q&A</pre>
+                </a>
+                <a href="{% url 'utils' %}">
+                    <pre><i class="fas fa-tools"></i>  Utilities</pre>
+                </a>
                 {% if not request.session.user_id %}
                 <button class="primary-btn" onclick="window.location.href='{% url 'login' %}'">
                     <i class="fas fa-sign-in-alt"></i> Sign In
                 </button>
                 {% else %}
                 <a href="{% url 'profile' request.session.username %}" style="color: var(--primary); font-weight: 600;">
-                     {{request.session.username}}
+                    {{request.session.username}}
                 </a>
                 <button class="primary-btn" onclick="window.location.href='{% url 'logoutUser' %}'">
                     <i class="fas fa-sign-out-alt"></i> Logout
@@ -123,21 +141,24 @@
 
         <section class="hero">
             <h1>Connect. Collaborate. Code.</h1>
-            <p>Join the growing community of Python developers sharing knowledge, solving problems, and building amazing things together.</p>
+            <p>Join the growing community of Python developers sharing knowledge, solving problems, and building amazing
+                things together.</p>
             <div class="hero-buttons">
-                <button class="primary-btn" onclick="window.location.href='{% url 'signup' %}'"><pre>Join Community Now  <i class="fas fa-user-astronaut"></i></pre></button>
+                <button class="primary-btn" onclick="window.location.href='{% url 'signup' %}'">
+                    <pre>Join Community Now  <i class="fas fa-user-astronaut"></i></pre>
+                </button>
                 {% comment %} <button class="secondary-btn">Explore Content</button> {% endcomment %}
             </div>
         </section>
-        
+
         {% else %}
 
         <section class="trending-hero">
             <div class="trending-overlay"></div>
             <div class="container trending-container">
-              
+
                 <h1>Python World Welcomes You</h1>
-                
+
                 <div class="trending-header">
                     <div class="trending-icon">
                         <i class="fas fa-fire"></i>
@@ -159,7 +180,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="trending-card">
                         <div class="trending-card-icon">
                             <i class="fas fa-brain"></i>
@@ -168,11 +189,11 @@
                             <h3>The Martin - Your AI Assistant</h3>
                             <p>Personal AI Assistant for Python World. Feel Free to Ask any Question</p>
                             <div class="trending-stats" style="color:var(--secondary)">
-                                <span>Press "A" Key to Use</span>
+                                <span>Press "Shift" Key to Use</span>
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="trending-card">
                         <div class="trending-card-icon">
                             <i class="fas fa-server"></i>
@@ -187,11 +208,12 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="trending-footer">
-                    <button class="primary-btn" onclick="window.location.href='{% url 'post' %}'">Explore Content</button>
+                    <button class="primary-btn" onclick="window.location.href='{% url 'post' %}'">Explore
+                        Content</button>
                 </div>
-                
+
             </div>
         </section>
 
@@ -202,55 +224,139 @@
                     <h2>Latest Activity</h2>
                     <div class="filter-tabs">
                         <button class="active">For You</button>
-                        <button>Popular</button>
-                        <button>Recent</button>
                     </div>
                 </div>
-                
-                <!-- Post 1 -->
+
+                <!-- Post -->
                 <div class="card">
                     <div class="post-header">
-                        <div class="post-avatar">JS</div>
+                        <!-- Avatar -->
+                        <div class="post-avatar">
+                            {% if request.session.user_id %}
+                            <a href="{% url 'profile' request.session.username %}"
+                                style="color: inherit; text-decoration: none;">JS</a>
+                            {% else %}
+                            <a href="{% url 'login' %}" style="color: inherit; text-decoration: none;">JS</a>
+                            {% endif %}
+                        </div>
+
                         <div class="post-meta">
-                            <div class="post-author">Jake Smith</div>
+                            <!-- Author Name -->
+                            <div class="post-author">
+                                {% if request.session.user_id %}
+                                <a href="{% url 'profile' request.session.username %}"
+                                    style="color: inherit; text-decoration: none;">Jake Smith</a>
+                                {% else %}
+                                <a href="{% url 'login' %}" style="color: inherit; text-decoration: none;">Jake
+                                    Smith</a>
+                                {% endif %}
+                            </div>
                             <div class="post-time">Posted 2 hours ago</div>
                         </div>
+
                         <div class="post-tag">Article</div>
                     </div>
+
                     <div class="post-content">
                         <h3>Optimizing Python Code Using Vectorization Techniques</h3>
-                        <p>Learn how to harness the power of NumPy for blazing fast numerical operations in Python. This article explores various vectorization techniques that can speed up your code by 100x or more...</p>
+                        <p>Learn how to harness the power of NumPy...</p>
+
                         <div class="post-image">
-                            <img src="{% static 'image/homePage1st.png' %}" alt="Code optimization visualization" style="width: 100%; height: 100%; object-fit: cover;">
+                            <img src="{% static 'image/homePage1st.png' %}" alt="Code optimization visualization"
+                                style="width: 100%; height: 100%; object-fit: cover;">
                         </div>
+
                         <div class="post-actions">
-                            <div class="post-action"><i class="fas fa-thumbs-up"></i> 243 Likes</div>
-                            <div class="post-action"><i class="fas fa-comments"></i> 42 Comments</div>
+                            <div class="post-action">
+                                {% if request.session.user_id %}
+                                <a href="{% url 'feed' %}" style="color: inherit; text-decoration: none;">
+                                    <i class="fas fa-thumbs-up"></i> 243 Likes
+                                </a>
+                                {% else %}
+                                <a href="{% url 'login' %}" style="color: inherit; text-decoration: none;">
+                                    <i class="fas fa-thumbs-up"></i> 243 Likes
+                                </a>
+                                {% endif %}
+                            </div>
+                            <div class="post-action">
+                                {% if request.session.user_id %}
+                                <a href="{% url 'feed' %}" style="color: inherit; text-decoration: none;">
+                                    <i class="fas fa-comments"></i> 42 Comments
+                                </a>
+                                {% else %}
+                                <a href="{% url 'login' %}" style="color: inherit; text-decoration: none;">
+                                    <i class="fas fa-comments"></i> 42 Comments
+                                </a>
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
                 </div>
-                
                 <!-- Post 2 -->
                 <div class="card">
                     <div class="post-header">
-                        <div class="post-avatar">ML</div>
+                        <!-- Avatar -->
+                        <div class="post-avatar">
+                            {% if request.session.user_id %}
+                            <a href="{% url 'profile' request.session.username %}"
+                                style="color: inherit; text-decoration: none;">ML</a>
+                            {% else %}
+                            <a href="{% url 'login' %}" style="color: inherit; text-decoration: none;">ML</a>
+                            {% endif %}
+                        </div>
+
                         <div class="post-meta">
-                            <div class="post-author">Maria Lopez</div>
+                            <!-- Author Name -->
+                            <div class="post-author">
+                                {% if request.session.user_id %}
+                                <a href="{% url 'profile' request.session.username %}"
+                                    style="color: inherit; text-decoration: none;">Maria Lopez</a>
+                                {% else %}
+                                <a href="{% url 'login' %}" style="color: inherit; text-decoration: none;">Maria
+                                    Lopez</a>
+                                {% endif %}
+                            </div>
                             <div class="post-time">Posted 5 hours ago</div>
                         </div>
+
                         <div class="post-tag">Question</div>
                     </div>
+
                     <div class="post-content">
                         <h3>What's the most efficient way to handle large JSON files in Python?</h3>
-                        <p>I'm working with JSON files that are several GBs in size and regular json.load() is causing memory issues. I've tried streaming parsers but I'm running into other problems. Any recommendations from the community?</p>
+                        <p>I'm working with JSON files that are several GBs in size and regular json.load() is causing
+                            memory issues. I've tried streaming parsers but I'm running into other problems. Any
+                            recommendations from the community?</p>
+
                         <div class="post-actions">
-                            <div class="post-action"><i class="fas fa-thumbs-up"></i> 87 Likes</div>
-                            <div class="post-action"><i class="fas fa-comments"></i> 36 Comments</div>
+                            <div class="post-action">
+                                {% if request.session.user_id %}
+                                <a href="{% url 'feed' %}" style="color: inherit; text-decoration: none;">
+                                    <i class="fas fa-thumbs-up"></i> 87 Likes
+                                </a>
+                                {% else %}
+                                <a href="{% url 'login' %}" style="color: inherit; text-decoration: none;">
+                                    <i class="fas fa-thumbs-up"></i> 87 Likes
+                                </a>
+                                {% endif %}
+                            </div>
+                            <div class="post-action">
+                                {% if request.session.user_id %}
+                                <a href="{% url 'feed' %}" style="color: inherit; text-decoration: none;">
+                                    <i class="fas fa-comments"></i> 36 Comments
+                                </a>
+                                {% else %}
+                                <a href="{% url 'login' %}" style="color: inherit; text-decoration: none;">
+                                    <i class="fas fa-comments"></i> 36 Comments
+                                </a>
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
                 </div>
+
+
             </div>
-            
             <div class="sidebar">
                 <!-- Trending Topics -->
                 <div class="sidebar-card">
@@ -286,82 +392,102 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Developer Utilities -->
                 <div class="sidebar-card">
                     <h3>Developer Utilities</h3>
                     <div class="utility-list">
-                        <div class="utility-item">
-                            <div class="utility-icon"><i class="fas fa-video"></i></div>
-                            <div class="utility-content">
-                                <h4>Screen Recorder</h4>
-                                <div class="utility-desc">Record and share your screen quickly</div>
+                        <!-- Screen Recorder -->
+                        <a href="{% if request.session.user_id %}{% url 'utils' %}{% else %}{% url 'login' %}{% endif %}"
+                            style="text-decoration: none; color: inherit;">
+                            <div class="utility-item">
+                                <div class="utility-icon"><i class="fas fa-video"></i></div>
+                                <div class="utility-content">
+                                    <h4>Screen Recorder</h4>
+                                    <div class="utility-desc">Record and share your screen quickly</div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="utility-item">
-                            <div class="utility-icon"><i class="fas fa-list"></i></div>
-                            <div class="utility-content">
-                                <h4>To-Do Manager</h4>
-                                <div class="utility-desc">Track your tasks and projects</div>
+                        </a>
+
+                        <!-- To-Do Manager -->
+                        <a href="{% if request.session.user_id %}{% url 'utils' %}{% else %}{% url 'login' %}{% endif %}"
+                            style="text-decoration: none; color: inherit;">
+                            <div class="utility-item">
+                                <div class="utility-icon"><i class="fas fa-list"></i></div>
+                                <div class="utility-content">
+                                    <h4>To-Do Manager</h4>
+                                    <div class="utility-desc">Track your tasks and projects</div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="utility-item">
-                            <div class="utility-icon"><i class="fas fa-code"></i></div>
-                            <div class="utility-content">
-                                <h4>Regex Tester</h4>
-                                <div class="utility-desc">Build and test regular expressions</div>
+                        </a>
+
+                        <!-- Regex Tester -->
+                        <a href="{% if request.session.user_id %}{% url 'utils' %}{% else %}{% url 'login' %}{% endif %}"
+                            style="text-decoration: none; color: inherit;">
+                            <div class="utility-item">
+                                <div class="utility-icon"><i class="fas fa-code"></i></div>
+                                <div class="utility-content">
+                                    <h4>Regex Tester</h4>
+                                    <div class="utility-desc">Build and test regular expressions</div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="utility-item">
-                            <div class="utility-icon"><i class="fas fa-clock"></i></div>
-                            <div class="utility-content">
-                                <h4>Code Timer</h4>
-                                <div class="utility-desc">Benchmark your code snippets</div>
+                        </a>
+
+                        <!-- Code Timer -->
+                        <a href="{% if request.session.user_id %}{% url 'utils' %}{% else %}{% url 'login' %}{% endif %}"
+                            style="text-decoration: none; color: inherit;">
+                            <div class="utility-item">
+                                <div class="utility-icon"><i class="fas fa-clock"></i></div>
+                                <div class="utility-content">
+                                    <h4>Code Timer</h4>
+                                    <div class="utility-desc">Benchmark your code snippets</div>
+                                </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                 </div>
+
             </div>
-        </div>
     </main>
     <footer>
         <div class="container">
             <div class="footer-content">
                 <div class="footer-column">
                     <h3>Python World</h3>
-                    <p style="color: var(--text-dim); margin-bottom: 1rem;">A community for Python developers to learn, share, and grow together.</p>
+                    <p style="color: var(--text-dim); margin-bottom: 1rem;">A community for Python developers to learn,
+                        share, and grow together.</p>
                     <div class="social-links">
-                        <a href="#"><i class="fab fa-github"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-discord"></i></a>
-                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="https://github.com/TIrth999999"><i class="fab fa-github"></i></a>
+                        <a href="https://x.com/vishwpatel76"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="https://x.com/vishwpatel76"><i class="fab fa-X"></i>X</a>
                     </div>
                 </div>
                 <div class="footer-column">
                     <h3>Resources</h3>
                     <ul>
-                        <li><a href="#">Documentation</a></li>
-                        <li><a href="#">API</a></li>
-                        <li><a href="#">Tutorials</a></li>
-                        <li><a href="#">Community</a></li>
+                        <li><a href="{% url 'post' %}">Posts</a></li>
+                        <li><a href="{% url 'article' %}">Articles</a></li>
+                        <li><a href="{% url 'qna' %}">Questions</a></li>
+                        <li><a href="{% url 'utils' %}">Utilities</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
                     <h3>Company</h3>
                     <ul>
-                        <li><a href="#">About Us</a></li>
-                        <li><a href="#">Careers</a></li>
-                        <li><a href="#">Blog</a></li>
-                        <li><a href="#">Contact</a></li>
+                        <li><a href="https://www.notion.so/About-Python-World-206c2787812b80fcabc7d909ef2b81b8?source=copy_link" target="_blank">About Us</a></li>
+                        <li><a href="https://www.notion.so/Careers-217c2787812b8027a345cc9d8ac71e6e?source=copy_link" target="_blank">Careers</a></li>
+                        <li><a href="https://www.notion.so/Blog-217c2787812b80e0bc14e62f3045412c?source=copy_linkhttps://www.notion.so/Blog-217c2787812b80e0bc14e62f3045412c?source=copy_link" target="_blank">Blog</a></li>
+                        <li><a href="https://www.notion.so/Contact-217c2787812b80589260efde91e1ae67?source=copy_link" target="_blank">Contact</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
                     <h3>Legal</h3>
                     <ul>
-                        <li><a href="#">Terms</a></li>
-                        <li><a href="#">Privacy</a></li>
-                        <li><a href="#">Cookies</a></li>
-                        <li><a href="#">Licenses</a></li>
+                        <li><a href="https://www.notion.so/Terms-217c2787812b80d68268d362bcb649fd?source=copy_link" target="_blank">Terms</a></li>
+                        <li><a href="https://www.notion.so/Privacy-217c2787812b8015be5ff781ebbba94f?source=copy_link" target="_blank">Privacy</a></li>
+                        <li><a href="https://www.notion.so/Cookies-217c2787812b80949ebfdccd61b40459?source=copy_link" target="_blank">Cookies</a></li>
+                        <li><a href="https://www.notion.so/Licenses-217c2787812b80a88f24c24624ccfcd3?source=copy_link" target="_blank">Licenses</a></li>
                     </ul>
                 </div>
             </div>
@@ -376,83 +502,99 @@
         let isListening = false;
         const startBtn = document.getElementById("start");
         document.getElementById("gradient-strip").classList.remove("show");
-        document.addEventListener("keydown", function(event) {
-          if (event.code === "KeyA") {
-              startDictation();
-          }
-      });
-  
-  
-  
-          setInterval(() => {
-  
+        document.addEventListener("keydown", function (event) {
+            if (event.key === "Shift") {
+                startDictation();
+            }
+        });
+
+
+
+        setInterval(() => {
+
             if (startBtn) {
                 startBtn.disabled = isListening;
             }
         }, 200);
-        
-  
-  
-  
-          function startDictation() {
+
+
+
+
+        function startDictation() {
             document.getElementById("gradient-strip").classList.add("show");
-               window.speechSynthesis.cancel();
-  
-              if ('webkitSpeechRecognition' in window) {
-                  recognition = new webkitSpeechRecognition();
-                  recognition.continuous = false;
-                  recognition.interimResults = false;
-                  recognition.lang = "en-US";
-                  recognition.start();
-                  isListening = true;
-                  recognition.onresult = function (event) {
-                      const transcript = event.results[0][0].transcript;
-                      console.log(transcript);
-                      document.getElementById('questionInput').value = transcript;
-                      recognition.stop();
-                      isListening = false;
-                      document.getElementById('voiceForm').submit();
-                  };
-  
-                  recognition.onerror = function (event) {
-                      //alert('Speech recognition error: ' + event.error);
-                      recognition.stop();
-                      isListening = false;
-                  };
-  
-                  recognition.onend = function () {
-                      isListening = false;
-                      document.getElementById("gradient-strip").classList.remove("show");
-                  };
-              } else {
-                  alert("Your browser does not support speech recognition.");
-              }
-          }
-  
-          function stopDictation() {
-              window.speechSynthesis.cancel();
-              if (recognition) {
-                  recognition.stop();
-              }
-          }
-  
-          {% if answer %}
-              // Only run this if there's an answer
-              const aiSpeech = new SpeechSynthesisUtterance("{{ answer|escapejs }}");
-              aiSpeech.onend = () => {
-                  startDictation(); // Wait till AI finishes speaking, then listen again
+            window.speechSynthesis.cancel();
 
-              };
-  
-              window.speechSynthesis.cancel(); // Cancel anything playing
-              window.speechSynthesis.speak(aiSpeech);
-              isListening = false;
-          {% endif %}
+            if ('webkitSpeechRecognition' in window) {
+                recognition = new webkitSpeechRecognition();
+                recognition.continuous = false;
+                recognition.interimResults = false;
+                recognition.lang = "en-US";
+                recognition.start();
+                isListening = true;
+                recognition.onresult = function (event) {
+                    const transcript = event.results[0][0].transcript;
+                    console.log(transcript);
+                    document.getElementById('questionInput').value = transcript;
+                    recognition.stop();
+                    isListening = false;
+                    document.getElementById('voiceForm').submit();
+                };
 
-      </script>
-      
+                recognition.onerror = function (event) {
+                    //alert('Speech recognition error: ' + event.error);
+                    recognition.stop();
+                    isListening = false;
+                };
+
+                recognition.onend = function () {
+                    isListening = false;
+                    document.getElementById("gradient-strip").classList.remove("show");
+                };
+            } else {
+                alert("Your browser does not support speech recognition.");
+            }
+        }
+
+        function stopDictation() {
+            window.speechSynthesis.cancel();
+            if (recognition) {
+                recognition.stop();
+            }
+        }
+
+        {% if answer %}
+        // Only run this if there's an answer
+        const aiSpeech = new SpeechSynthesisUtterance("{{ answer|escapejs }}");
+        aiSpeech.onend = () => {
+            startDictation(); // Wait till AI finishes speaking, then listen again
+
+        };
+
+        window.speechSynthesis.cancel(); // Cancel anything playing
+        window.speechSynthesis.speak(aiSpeech);
+        isListening = false;
+        {% endif %}
+    </script>
+
+    <script>
+       const isLoggedIn = "{{ request.session.user_id}}"
+        
+        const searchInput = document.getElementById("searchInput")
+        
+        searchInput.addEventListener("keydown", function (event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                searchInput.value = ""
+                if (!isLoggedIn){
+                    window.location.href = "{% url 'login' %}";
+                    
+                } 
+            }});
+    </script>
+
 </body>
 <div id="mobile-warning">
     This site is not made for mobile phones
 </div>
+
 </html>

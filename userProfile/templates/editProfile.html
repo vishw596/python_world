@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
-    
+    <link rel="icon" href="{% static 'image/favicon.ico' %}" type="image/x-icon">
     <link rel="stylesheet" href="{% static 'css/scroll.css' %}" />
     <link rel="stylesheet" href="{% static 'css/editProfile.css' %}" />
     <link rel="stylesheet" href="{% static 'css/uni.css' %}" />
@@ -30,8 +30,8 @@
             <!-- Profile Picture Section -->
             <div class="profile-picture-container">
                 <div class="profile-picture" id="profile-picture-preview">
-                    {% if user.profilePicUrl %}
-                        <img src="{{user.profilePicUrl}}" alt="{{user.username}}'s profile" />
+                    {% if user_data.profilePicUrl %}
+                        <img src="{{user_data.profilePicUrl}}" alt="{{user.username}}'s profile" />
                     {% else %}
                     {{ user.username|first|upper }}
                     {% endif %}
@@ -51,7 +51,7 @@
                         <label for="username">Username</label>
                         <div class="input-wrapper">
                             <i class="fas fa-at input-icon"></i>
-                            <input type="text" id="username" name="username" placeholder="Your username">
+                            <input type="text" id="username" name="username" placeholder="Your username" value="{{ user_data.username }}">
                         </div>
                         <small class="help-text">This will be displayed on your profile and posts</small>
                     </div>
@@ -61,7 +61,7 @@
                         <label for="email">Email Address</label>
                         <div class="input-wrapper">
                             <i class="fas fa-envelope input-icon"></i>
-                            <input type="email" id="email" name="email" placeholder="your.email@example.com">
+                            <input type="email" id="email" name="email" placeholder="your.email@example.com" value="{{ user_data.email }}">
                         </div>
                         <small class="help-text">We'll never share your email with anyone else</small>
                     </div>
@@ -72,7 +72,7 @@
                     <label for="bio">Bio</label>
                     <div class="bio-wrapper">
                         <i class="fas fa-feather-alt bio-icon"></i>
-                        <textarea id="bio" name="bio" class="with-icon" rows="4" placeholder="Tell the community about yourself, your interests, and experience with Python..."></textarea>
+                        <textarea id="bio" name="bio" class="with-icon" rows="4" placeholder="...">{{ user_data.bio }}</textarea>
                     </div>
                     <small class="help-text">Share your Python journey with the community (max 300 characters)</small>
                 </div>
@@ -122,7 +122,7 @@
             reader.readAsDataURL(file);
         }
         else{
-            picturePreview.innerHTML = `<img src="{{user.profilePicUrl}}" alt="Profile Picture">`;
+            picturePreview.innerHTML = `<img src="{{ user_data.profilePicUrl }}" alt="Profile Picture">`;;
 
         }
     });

@@ -47,11 +47,11 @@ ELASTICSEARCH_DSL = {
 
 SECRET_KEY = "django-insecure-0pfz8hbbu^%f#vj^t=n_qi^x7ymd@j-(y2e9=y2v2n+_k)(x0s"
 
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["*"]
 
-CSRF_TRUSTED_ORIGINS = ["http://127.0.0.1:8000", "http://localhost:8000","https://34.10.231.119"]
+CSRF_TRUSTED_ORIGINS = ["http://127.0.0.1:8000", "http://localhost:8000","https://34.10.231.119","https://pythonworld.mooo.com"]
 
 INSTALLED_APPS = [
     "django.contrib.admin",

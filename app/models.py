@@ -6,7 +6,7 @@ from datetime import date
 
 class User(Document):
     username = StringField(unique=True)
-    password = StringField()
+    password = StringField(max_length=128)
     email = EmailField(required=True,unique=True)
     bio = StringField(default="hey there i'm using social media platform")
     followings = ListField(ReferenceField('User'))

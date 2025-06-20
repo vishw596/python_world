@@ -5,11 +5,11 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Python Community</title>
+        <title>Python World | Posts</title>
         <link
-            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&displsay=swap"
             rel="stylesheet" />
-            
+            <link rel="icon" href="{% static 'image/favicon.ico' %}" type="image/x-icon">
         <link rel="stylesheet" href="{% static 'css/scroll.css' %}" />
         <link rel="stylesheet" href="{% static 'css/post.css' %}" />
         <link rel="stylesheet" href="{% static 'css/uni.css' %}" />
@@ -169,10 +169,10 @@
                         "></div>
                 </div>
                 <div class="nav-links">
-                    <a href="{% url 'feed' %}" style="color: var(--primary); font-weight: 600"> Feed</a>
-                    <a href="{% url 'article' %}"> Articles</a>
-                    <a href="{% url 'qna' %}"> Q&A</a>
-                    <a href="{% url 'utils' %}"> Utilities</a>
+                    <a href="{% url 'feed' %}"><pre><i class="fas fa-rss"></i>  Feed</pre></a>
+                    <a href="{% url 'article' %}"><pre><i class="fas fa-file-alt"></i>  Articles</pre></a>
+                    <a href="{% url 'qna' %}"><pre><i class="fas fa-question-circle"></i>  Q&A</pre></a>
+                    <a href="{% url 'utils' %}"><pre><i class="fas fa-tools"></i>  Utilities</pre></a>
                     {% if not request.session.user_id %}
                     <button class="primary-btn" onclick="window.location.href='{% url 'login' %}'">
                         <i class="fas fa-sign-in-alt"></i> Sign In
@@ -211,7 +211,7 @@
                 {{request.session.username}}
                 <br />
                 <br />
-                <button id="openPostModalButton" class="add-post-btn" >
+                <button id="openPostModalButton" class="add-post-btn" onclick="document.getElementById('postModal').style.display = 'block';">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="20"
@@ -231,13 +231,14 @@
 
             <!-- Feed of Posts -->
             <div class="posts-container" id="posts-container" style="overflow-x:visible">
+                <form method="POST" action="{% url 'postFilter' %}">
+                {% csrf_token %}
                 <div class="category-filters">
-                    <button class="category-filter active">All</button>
-                    <button class="category-filter">Latest</button>
-                    <button class="category-filter">New to You</button>
-                    <button class="category-filter">Most Liked</button>
-                    <button class="category-filter">Most Shared</button>
-
+                    <button class="category-filter {% if selected_filter == 'all' %}active{% endif %}" type="submit" name="filterBtn" value="all">All</button>
+                    <button class="category-filter {% if selected_filter == 'new' %}active{% endif %}" type="submit" name="filterBtn" value="new">New to You</button>
+                    <button class="category-filter {% if selected_filter == 'mostLiked' %}active{% endif %}" type="submit" name="filterBtn" value="mostLiked">Most Liked</button>
+                    <button class="category-filter {% if selected_filter == 'mostShared' %}active{% endif %}" type="submit" name="filterBtn" value="mostShared">Most Commented</button>
+                </form>
                 </div>
 
                 {% for post in posts %}
@@ -445,7 +446,7 @@
          <!-- Post creation modal -->
          <div id="postModal" class="modal">
             <div class="modal-content">
-                <span class="close">&times;</span>
+                <span class="close" onclick="document.getElementById('postModal').style.display = 'none';">&times;</span>
                 <div class="modal-header">
                     <h2><i class="fas fa-edit"></i> Create New Post</h2>
                 </div>
@@ -493,7 +494,7 @@
                     </div>
                     
                     <div class="form-actions">
-                        <button type="button" class="secondary-btn close-modal">Cancel</button>
+                        <button type="button" class="secondary-btn close-modal" onclick="document.getElementById('postModal').style.display = 'none';">Cancel</button>
                         <button type="submit" class="primary-btn">
                             <i class="fas fa-paper-plane"></i> Publish
                         </button>
@@ -604,67 +605,67 @@
             });
 
             // Infinite scrolling simulation
-            const postsContainer = document.getElementById("posts-container");
-            const loadingIndicator = document.getElementById("loading-indicator");
-            let isLoading = false;
-            let page = 1;
+            // const postsContainer = document.getElementById("posts-container");
+            // const loadingIndicator = document.getElementById("loading-indicator");
+            // let isLoading = false;
+            // let page = 1;
 
-            function loadMorePosts() {
-                if (isLoading) return;
+            // function loadMorePosts() {
+            //     if (isLoading) return;
 
-                // Show loading indicator
-                isLoading = true;
-                loadingIndicator.style.display = "block";
+            //     // Show loading indicator
+            //     isLoading = true;
+            //     loadingIndicator.style.display = "block";
 
-                // Simulate API call with timeout
-                setTimeout(() => {
-                    // This would be replaced with actual fetch call to get more posts
-                    // For demo purposes, we'll just clone existing posts
-                    const posts = document.querySelectorAll(".post-card:not(.loading)");
+            //     // Simulate API call with timeout
+            //     setTimeout(() => {
+            //         // This would be replaced with actual fetch call to get more posts
+            //         // For demo purposes, we'll just clone existing posts
+            //         const posts = document.querySelectorAll(".post-card:not(.loading)");
 
-                    if (posts.length > 0 && page < 3) {
-                        // Limit to prevent too many clones
-                        // Insert loading indicator before the first post
-                        loadingIndicator.style.display = "none";
+            //         if (posts.length > 0 && page < 3) {
+            //             // Limit to prevent too many clones
+            //             // Insert loading indicator before the first post
+            //             loadingIndicator.style.display = "none";
 
-                        // Clone and append posts with new IDs
-                        posts.forEach((post) => {
-                            const clone = post.cloneNode(true);
-                            clone.classList.add("fade-in");
+            //             // Clone and append posts with new IDs
+            //             posts.forEach((post) => {
+            //                 const clone = post.cloneNode(true);
+            //                 clone.classList.add("fade-in");
 
-                            // Update IDs to make them unique
-                            const postId = Math.random().toString(36).substring(2, 10);
+            //                 // Update IDs to make them unique
+            //                 const postId = Math.random().toString(36).substring(2, 10);
 
-                            // Update all IDs in the clone
-                            const elements = clone.querySelectorAll("[id]");
-                            elements.forEach((el) => {
-                                const oldId = el.id;
-                                const newId = oldId.replace(/\d+$/, postId);
-                                el.id = newId;
-                            });
+            //                 // Update all IDs in the clone
+            //                 const elements = clone.querySelectorAll("[id]");
+            //                 elements.forEach((el) => {
+            //                     const oldId = el.id;
+            //                     const newId = oldId.replace(/\d+$/, postId);
+            //                     el.id = newId;
+            //                 });
 
-                            // Append clone after loading indicator
-                            postsContainer.insertBefore(clone, loadingIndicator);
+            //                 // Append clone after loading indicator
+            //                 postsContainer.insertBefore(clone, loadingIndicator);
 
-                            // Ensure comment wrapper has scroll
-                            const commentWrapper = clone.querySelector(".comments-wrapper");
-                            if (commentWrapper) {
-                                commentWrapper.style.overflowY = "auto";
-                            }
-                        });
+            //                 // Ensure comment wrapper has scroll
+            //                 const commentWrapper = clone.querySelector(".comments-wrapper");
+            //                 if (commentWrapper) {
+            //                     commentWrapper.style.overflowY = "auto";
+            //                 }
+            //             });
 
-                        page++;
-                    } else {
-                        // No more posts to load
-                        loadingIndicator.innerHTML = "<p>No more posts to load</p>";
-                        setTimeout(() => {
-                            loadingIndicator.style.display = "none";
-                        }, 2000);
-                    }
+            //             page++;
+            //         } else {
+            //             // No more posts to load
+            //             loadingIndicator.innerHTML = "<p>No more posts to load</p>";
+            //             setTimeout(() => {
+            //                 loadingIndicator.style.display = "none";
+            //             }, 2000);
+            //         }
 
-                    isLoading = false;
-                }, 1000);
-            }
+            //         isLoading = false;
+            //     }, 1000);
+            // }
 
             // Detect when user scrolls to bottom of posts container
             postsContainer.addEventListener("scroll", function () {
@@ -808,7 +809,7 @@
             const startBtn = document.getElementById("start");
             document.getElementById("gradient-strip").classList.remove("show");
             document.addEventListener("keydown", function(event) {
-              if (event.code === "KeyA") {
+              if (event.key === "Shift") {
                   startDictation();
               }
           });

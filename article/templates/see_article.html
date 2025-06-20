@@ -1,91 +1,101 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Python World | {{ article.title }}</title>
-        <link rel="stylesheet" href="{% static 'css/scroll.css' %}" />
-        <link rel="stylesheet" href="{% static 'css/see_article.css' %}" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <style>
-            .my-swal-popup {
-                background-color:var(--dark-bg); /* Dark background */
-                color: #ffffff; /* White text */
-                border-radius: 10px;
-              }
-              
-              .my-swal-title {
-                color: var(--primary); /* Optional: gold title text */
-              }
-              
-              .my-swal-html {
-                color: var(--primary); /* Light gray content text */
-              }
-              
-              .my-swal-button {
-                background-color: #28a745 !important; /* Green button */
-                color: white !important;
-              }
-        </style>
-    </head>
-    <body>
-        <header style="margin-bottom: 25px;">
-            <div class="container header-container">
-                <div class="logo" onclick="window.location.href = '{% url 'index' %}'">
-                    Python<span>World</span>
-                </div>
-                <div class="search-bar" style="visibility: hidden;">
-                    <input type="text" placeholder="Search for articles, questions, or developers..." />
-                </div>
-                <div class="nav-links">
-                    <a href="{% url 'article' %}">Back to Articles</a>
-                    <button class="primary-btn" onclick="window.location.href='{% url 'logoutUser' %}'">
-                        <i class="fas fa-sign-out-alt"></i> Logout
-                    </button>
-                </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Python World | {{ article.title }}</title>
+  <link rel="icon" href="{% static 'image/favicon.ico' %}" type="image/x-icon">
+  <link rel="stylesheet" href="{% static 'css/scroll.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/see_article.css' %}" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+    .my-swal-popup {
+      background-color: var(--dark-bg);
+      /* Dark background */
+      color: #ffffff;
+      /* White text */
+      border-radius: 10px;
+    }
+
+    .my-swal-title {
+      color: var(--primary);
+      /* Optional: gold title text */
+    }
+
+    .my-swal-html {
+      color: var(--primary);
+      /* Light gray content text */
+    }
+
+    .my-swal-button {
+      background-color: #28a745 !important;
+      /* Green button */
+      color: white !important;
+    }
+  </style>
+</head>
+
+<body>
+  <header style="margin-bottom: 25px;">
+    <div class="container header-container">
+      <div class="logo" onclick="window.location.href = '{% url 'index' %}'">
+        Python<span>World</span>
+      </div>
+      <div class="search-bar" style="visibility: hidden;">
+        <input type="text" placeholder="Search for articles, questions, or developers..." />
+      </div>
+      <div class="nav-links">
+        <a href="{% url 'article' %}">Back to Articles</a>
+        <button class="primary-btn" onclick="window.location.href='{% url 'logoutUser' %}'">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="articles-wrapper" style="width: 100%;">
+      <div class="article-main" style="width: 100%;">
+        <div onclick="copyLinkToPost('{{ article.id }}')"
+          style="text-decoration:none;color:white;font-size:1.5rem;float:right;cursor:pointer;"><i
+            class="fas fa-share-alt"></i></div>
+        <div class="article-header">
+          <h1 class="article-title">{{ article.title }}</h1>
+          <h3>{{ article.description }}</h3>
+          <br>
+          <div class="article-meta">
+            <div class="article-category">{{ article.topic }}</div>
+            <div class="article-date">{{ article.created_at }}</div>
+          </div>
+          <div class="article-author">
+            <div class="author-avatar">
+              {{ article.source|slice:":2"|upper }}
             </div>
-        </header>
+            <span>{{ article.source }}</span>
+          </div>
+        </div>
+        <div class="article-img">
+          <img src="{{ article.imageUrl }}" alt="{{ article.title }}" />
+        </div>
+        <div class="article-content">
+          {{ article.content|safe }}
 
-        <main class="container">
-            <div class="articles-wrapper" style="width: 100%;">
-                <div class="article-main" style="width: 100%;">
-                    <div onclick="copyLinkToPost('{{ article.id }}')" style="text-decoration:none;color:white;font-size:1.5rem;float:right;cursor:pointer;"><i class="fas fa-share-alt"></i></div>
-                    <div class="article-header">
-                        <h1 class="article-title">{{ article.title }}</h1>
-                        <h3>{{ article.description }}</h3>
-                        <br>
-                        <div class="article-meta">
-                            <div class="article-category">{{ article.topic }}</div>
-                            <div class="article-date">{{ article.created_at }}</div>
-                        </div>
-                        <div class="article-author">
-                            <div class="author-avatar">
-                                {{ article.source|slice:":2"|upper }}
-                            </div>
-                            <span>{{ article.source }}</span>
-                        </div>
-                    </div>
-                    <div class="article-img">
-                        <img src="{{ article.imageUrl }}" alt="{{ article.title }}" />
-                    </div>
-                    <div class="article-content">
-                        {{ article.content|safe }}
-                        
-                    </div>
-                    <div class="article-stats">
-                        <div class="article-stat"><i class="fas fa-eye"></i> {{ article.no_of_views }} Views</div>
-                    </div>
-                </div>
-                <div class="sidebar">
-                    <div class="sidebar-card">
-                        <form method="POST">
-                            {% csrf_token %}
-                            {% if summary %}
-                            <button id="summurize" style="cursor:not-allowed;disable:true; background-color:gray;
+        </div>
+        <div class="article-stats">
+          <div class="article-stat"><i class="fas fa-eye"></i> {{ article.no_of_views }} Views</div>
+        </div>
+      </div>
+      <div class="sidebar">
+        <div class="sidebar-card">
+          <form method="POST" action="{% url 'see_article' article.id %}">
+            {% csrf_token %}
+            {% if summary %}
+            <button id="summurize" style="cursor:not-allowed;disable:true; background-color:gray;
     background-size: 400% 400%;
     color: white;
     border: none;
@@ -95,32 +105,36 @@
     cursor: not-allowed;
     text-decoration: none;
     display: inline-block;
-    transition: transform 0.2s, box-shadow 0.2s;" disabled><h4>Summurize with AI</h4></button>
-                            {% else %}
-                            <button class="animated-gradient-button" id="summurize"><h4>Summurize with AI</h4></button>
-                            {% endif %}
-                        </form>
-                        
-                        {% if summary %}
-                        <br>
-                        <p style="box-shadow: rgba(136, 165, 191, 0.48) 6px 2px 16px 0px, var(--primary) -6px -2px 16px 0px;">{{ summary }}</p>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-        </main>
-        <script>
-            
-            function copyLinkToPost(articleId) {
-                const baseUrl = window.location.origin + window.location.pathname;
-                const fullUrl = `${baseUrl}#article-${articleId}`;
-            
-                navigator.clipboard.writeText(fullUrl)
-                  .then(() => {
-                    Swal.fire({
-                        title: "Link copied to clipboard!",
-                        icon: "success",
-                        html: `
+    transition: transform 0.2s, box-shadow 0.2s;" disabled>
+              <h4>Summurize with AI</h4>
+            </button>
+            {% else %}
+            <button class="animated-gradient-button" id="summurize">
+              <h4>Summurize with AI</h4>
+            </button>
+            {% endif %}
+          </form>
+
+          {% if summary %}
+          <br>
+          <p style="box-shadow: rgba(136, 165, 191, 0.48) 6px 2px 16px 0px, var(--primary) -6px -2px 16px 0px;">{{summary}}</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </main>
+  <script>
+
+    function copyLinkToPost(articleId) {
+      const baseUrl = window.location.origin + window.location.pathname;
+      const fullUrl = `${baseUrl}#article-${articleId}`;
+
+      navigator.clipboard.writeText(fullUrl)
+        .then(() => {
+          Swal.fire({
+            title: "Link copied to clipboard!",
+            icon: "success",
+            html: `
                           <div style="margin-bottom: 10px;margin-top:5px;">
                             <a href="https://wa.me/?text=${encodeURIComponent(fullUrl)}" target="_blank" style="margin: 0 12px;text-decoration: none;">
                               <img src="https://cdn.simpleicons.org/whatsapp/FFFFFF" alt="WhatsApp" width="32" height="32">
@@ -135,40 +149,41 @@
                           
                           <p style="margin-top: 20px;">Paste link anywhere to share</p>
                         `,
-                        showCloseButton: true,
-                        showCancelButton: false,
-                        focusConfirm: false,
-                        confirmButtonText: `
+            showCloseButton: true,
+            showCancelButton: false,
+            focusConfirm: false,
+            confirmButtonText: `
                           <i class="fa fa-thumbs-up"></i> Great!
                         `,
-                        confirmButtonAriaLabel: "Thumbs up, great!",
-                        customClass: {
-                            popup: 'my-swal-popup',
-                            title: 'my-swal-title',
-                            htmlContainer: 'my-swal-html',
-                            confirmButton: 'my-swal-button'
-                          }
-                      });
-                  })
-                  .catch(() => {
-                    Swal.fire({
-                      icon: 'error',
-                      title: 'Failed to copy link \n Try Again',
-                      showConfirmButton: false,
-                      timer: 1500
-                    });
-                  });
-              }
+            confirmButtonAriaLabel: "Thumbs up, great!",
+            customClass: {
+              popup: 'my-swal-popup',
+              title: 'my-swal-title',
+              htmlContainer: 'my-swal-html',
+              confirmButton: 'my-swal-button'
+            }
+          });
+        })
+        .catch(() => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Failed to copy link \n Try Again',
+            showConfirmButton: false,
+            timer: 1500
+          });
+        });
+    }
 
-                window.addEventListener('load', () => {
-                  const target = window.location.hash;
-                  if (target) {
-                    const el = document.querySelector(target);
-                    if (el) {
-                      el.scrollIntoView({ behavior: 'smooth' });
-                    }
-                  }
-                });
-        </script>
-    </body>
+    window.addEventListener('load', () => {
+      const target = window.location.hash;
+      if (target) {
+        const el = document.querySelector(target);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+    });
+  </script>
+</body>
+
 </html>

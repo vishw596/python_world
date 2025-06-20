@@ -6,6 +6,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Notification Preferences - Python World</title>
+            <link rel="icon" href="{% static 'image/favicon.ico' %}" type="image/x-icon">
+                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <style>
         * {
             margin: 0;
@@ -424,6 +426,9 @@
     </style>
 </head>
 <body>
+    <div style=" width: 50px;height: 50px; background-color: #3498db; border-radius: 50%; position: fixed; top: 20px; left: 20px; z-index: 1000; display: flex; align-items: center; justify-content: center;font-size: larger;">
+        <i class="fas fa-home" style=" color: #e2e8f0; cursor: pointer;" onclick="window.location.href = '{% url 'profile' user.username %}'"></i>
+    </div>
     <div class="container">
         <!-- Header -->
         <div class="header">

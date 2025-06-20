@@ -58,6 +58,7 @@ urlpatterns = [
     path('post/<str:post_id>/comment/', post.comment_post, name='comment_post'),
     path("feed",post.feed,name="feed"),
     path('search/post/',post.search_post,name='search_post'),
+    path('postFilter', post.postFilter, name='postFilter'),
 
     # PROFILE
     path("editProfile/",user.editProfile,name="editProfile"),

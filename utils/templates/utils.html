@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <link rel="stylesheet" href="{% static 'css/utils.css' %}" />
     <link rel="stylesheet" href="{% static 'css/uni.css' %}" />
+    <link rel="icon" href="{% static 'image/favicon.ico' %}" type="image/x-icon">
 
     <style>
         .gradient-strip {
@@ -64,10 +65,10 @@
                 <input type="text" placeholder="Search for your desired utility" />
             </div>
             <div class="nav-links">
-                <a href="{% url 'feed' %}"> Feed</a>
-                <a href="{% url 'article' %}" > Articles</a>
-                <a href="{% url 'qna' %}" > Q&A</a>
-                <a href="{% url 'utils' %}" style="color: var(--primary); font-weight: 600;"> Utilities</a>
+                <a href="{% url 'feed' %}"><i class="fas fa-rss"></i>  Feed</a>
+                <a href="{% url 'article' %}"><i class="fas fa-file-alt"></i>  Articles</a>
+                <a href="{% url 'qna' %}"><i class="fas fa-question-circle"></i>  Q&A</a>
+                <a href="{% url 'utils' %}"><i class="fas fa-tools"></i>  Utilities</a>
                 {% if not request.session.user_id %}
                 <button class="primary-btn" onclick="window.location.href='{% url 'login' %}'">
                     <i class="fas fa-sign-in-alt"></i> Sign In
@@ -165,39 +166,40 @@
             <div class="footer-content">
                 <div class="footer-column">
                     <h3>Python World</h3>
-                    <p style="color: var(--text-dim); margin-bottom: 1rem;">A community for Python developers to learn, share, and grow together.</p>
+                    <p style="color: var(--text-dim); margin-bottom: 1rem;">A community for Python developers to learn,
+                        share, and grow together.</p>
                     <div class="social-links">
-                        <a href="#"><i class="fab fa-github"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-discord"></i></a>
-                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="https://github.com/TIrth999999"><i class="fab fa-github"></i></a>
+                        <a href="https://x.com/vishwpatel76"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="https://x.com/vishwpatel76"><i class="fab fa-X"></i>X</a>
                     </div>
                 </div>
                 <div class="footer-column">
                     <h3>Resources</h3>
                     <ul>
-                        <li><a href="#">Documentation</a></li>
-                        <li><a href="#">API</a></li>
-                        <li><a href="#">Tutorials</a></li>
-                        <li><a href="#">Community</a></li>
+                        <li><a href="{% url 'post' %}">Posts</a></li>
+                        <li><a href="{% url 'article' %}">Articles</a></li>
+                        <li><a href="{% url 'qna' %}">Questions</a></li>
+                        <li><a href="{% url 'utils' %}">Utilities</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
                     <h3>Company</h3>
                     <ul>
-                        <li><a href="#">About Us</a></li>
-                        <li><a href="#">Careers</a></li>
-                        <li><a href="#">Blog</a></li>
-                        <li><a href="#">Contact</a></li>
+                        <li><a href="https://www.notion.so/About-Python-World-206c2787812b80fcabc7d909ef2b81b8?source=copy_link" target="_blank">About Us</a></li>
+                        <li><a href="https://www.notion.so/Careers-217c2787812b8027a345cc9d8ac71e6e?source=copy_link" target="_blank">Careers</a></li>
+                        <li><a href="https://www.notion.so/Blog-217c2787812b80e0bc14e62f3045412c?source=copy_linkhttps://www.notion.so/Blog-217c2787812b80e0bc14e62f3045412c?source=copy_link" target="_blank">Blog</a></li>
+                        <li><a href="https://www.notion.so/Contact-217c2787812b80589260efde91e1ae67?source=copy_link" target="_blank">Contact</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
                     <h3>Legal</h3>
                     <ul>
-                        <li><a href="#">Terms</a></li>
-                        <li><a href="#">Privacy</a></li>
-                        <li><a href="#">Cookies</a></li>
-                        <li><a href="#">Licenses</a></li>
+                        <li><a href="https://www.notion.so/Terms-217c2787812b80d68268d362bcb649fd?source=copy_link" target="_blank">Terms</a></li>
+                        <li><a href="https://www.notion.so/Privacy-217c2787812b8015be5ff781ebbba94f?source=copy_link" target="_blank">Privacy</a></li>
+                        <li><a href="https://www.notion.so/Cookies-217c2787812b80949ebfdccd61b40459?source=copy_link" target="_blank">Cookies</a></li>
+                        <li><a href="https://www.notion.so/Licenses-217c2787812b80a88f24c24624ccfcd3?source=copy_link" target="_blank">Licenses</a></li>
                     </ul>
                 </div>
             </div>
@@ -235,80 +237,80 @@
         let isListening = false;
         const startBtn = document.getElementById("start");
         document.getElementById("gradient-strip").classList.remove("show");
-        document.addEventListener("keydown", function(event) {
-          if (event.code === "KeyA") {
-              startDictation();
-          }
-      });
-  
-  
-  
-          setInterval(() => {
-  
+        document.addEventListener("keydown", function (event) {
+            if (event.key === "Shift") {
+                startDictation();
+            }
+        });
+
+
+
+        setInterval(() => {
+
             if (startBtn) {
                 startBtn.disabled = isListening;
             }
         }, 200);
-        
-  
-  
-  
-          function startDictation() {
+
+
+
+
+        function startDictation() {
             document.getElementById("gradient-strip").classList.add("show");
-               window.speechSynthesis.cancel();
-  
-              if ('webkitSpeechRecognition' in window) {
-                  recognition = new webkitSpeechRecognition();
-                  recognition.continuous = false;
-                  recognition.interimResults = false;
-                  recognition.lang = "en-US";
-                  recognition.start();
-                  isListening = true;
-                  recognition.onresult = function (event) {
-                      const transcript = event.results[0][0].transcript;
-                      console.log(transcript);
-                      document.getElementById('questionInput').value = transcript;
-                      recognition.stop();
-                      isListening = false;
-                      document.getElementById('voiceForm').submit();
-                  };
-  
-                  recognition.onerror = function (event) {
-                      //alert('Speech recognition error: ' + event.error);
-                      recognition.stop();
-                      isListening = false;
-                  };
-  
-                  recognition.onend = function () {
-                      isListening = false;
-                      document.getElementById("gradient-strip").classList.remove("show");
-                  };
-              } else {
-                  alert("Your browser does not support speech recognition.");
-              }
-          }
-  
-          function stopDictation() {
-              window.speechSynthesis.cancel();
-              if (recognition) {
-                  recognition.stop();
-              }
-          }
-  
-          {% if answer %}
-              // Only run this if there's an answer
-              const aiSpeech = new SpeechSynthesisUtterance("{{ answer|escapejs }}");
-              aiSpeech.onend = () => {
-                  startDictation(); // Wait till AI finishes speaking, then listen again
+            window.speechSynthesis.cancel();
 
-              };
-  
-              window.speechSynthesis.cancel(); // Cancel anything playing
-              window.speechSynthesis.speak(aiSpeech);
-              isListening = false;
-          {% endif %}
+            if ('webkitSpeechRecognition' in window) {
+                recognition = new webkitSpeechRecognition();
+                recognition.continuous = false;
+                recognition.interimResults = false;
+                recognition.lang = "en-US";
+                recognition.start();
+                isListening = true;
+                recognition.onresult = function (event) {
+                    const transcript = event.results[0][0].transcript;
+                    console.log(transcript);
+                    document.getElementById('questionInput').value = transcript;
+                    recognition.stop();
+                    isListening = false;
+                    document.getElementById('voiceForm').submit();
+                };
 
-      </script>
+                recognition.onerror = function (event) {
+                    //alert('Speech recognition error: ' + event.error);
+                    recognition.stop();
+                    isListening = false;
+                };
+
+                recognition.onend = function () {
+                    isListening = false;
+                    document.getElementById("gradient-strip").classList.remove("show");
+                };
+            } else {
+                alert("Your browser does not support speech recognition.");
+            }
+        }
+
+        function stopDictation() {
+            window.speechSynthesis.cancel();
+            if (recognition) {
+                recognition.stop();
+            }
+        }
+
+        {% if answer %}
+        // Only run this if there's an answer
+        const aiSpeech = new SpeechSynthesisUtterance("{{ answer|escapejs }}");
+        aiSpeech.onend = () => {
+            startDictation(); // Wait till AI finishes speaking, then listen again
+
+        };
+
+        window.speechSynthesis.cancel(); // Cancel anything playing
+        window.speechSynthesis.speak(aiSpeech);
+        isListening = false;
+        {% endif %}
+
+    </script>
       
 </body>
 <div id="mobile-warning">
